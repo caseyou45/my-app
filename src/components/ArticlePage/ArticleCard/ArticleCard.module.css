@@ -1,0 +1,178 @@
+.column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+
+}
+
+.storyCard {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding: .5rem;
+}
+
+.article {
+    padding: 1rem;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .4);
+    background-color: #fff;
+    border-radius: 10px;
+    color: #333;
+    max-width: 85%;
+    margin: 2rem auto;
+}
+
+.storyCard img {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .4);
+    max-width: 40%;
+    margin-right: 1rem;
+}
+
+
+.article a {
+    font-size: 0.8rem;
+}
+
+.article h2 {
+    font-weight: normal;
+    margin: 1rem .25rem;
+}
+
+.article h4 {
+    font-weight: normal;
+}
+
+.article h5 {
+    border-left: 4px solid#4b4848;
+    padding-left: 5px;
+    color: #4b4848;
+    font-weight: normal;
+}
+
+
+.article button {
+    box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.1);
+    border: .5px solid #FF6F6F;
+    cursor: pointer;
+    display: block;
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 5px;
+    color: #FF6F6F;
+    margin: 2rem auto;
+    min-width: 8rem;
+    padding: .5rem 0 .5rem;
+}
+
+.article button:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+    color: #ff6f6fd0;
+
+}
+
+
+.popupCard {
+    background-color: #ffbbbb2a;
+    border-radius: 10px;
+    color: #4d4d4d;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-width: 90%;
+    margin: 2rem 0 0 0;
+}
+
+.popUpButton {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.popUpButton button {
+    border: .2px solid #FF6F6F;
+    color: #FF6F6F;
+    border-radius: 4px;
+    font-size: .9rem;
+    min-width: 7rem;
+    cursor: pointer;
+    background-color: #fff;
+    margin: 0.5rem;
+    padding: 0.2rem;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .1);
+    height: 2rem;
+}
+
+
+.popUpButton button:hover,
+.popUpButton button:active {
+    color: #ff6f6fc5;
+    background-color: rgba(255, 255, 255, 0.808);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .15);
+
+}
+
+
+.popUpButton button:active {
+    border: .2px solid #fff;
+    color: #fff;
+    background-color: #FF6F6F;
+
+}
+
+
+.popupCard textarea {
+    border: .2px solid #FF6F6F;
+    color: #333;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.8rem;
+    min-height: 5rem;
+    margin-right: 1rem;
+    overflow: auto;
+    padding: .5rem;
+    resize: none;
+    width: 20rem;
+}
+
+
+
+@media only screen and (max-width: 800px) {
+    .storyCard {
+        flex-wrap: wrap;
+        padding: 0;
+    }
+
+    .storyCard img {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    /* .article {
+    padding: 1.2rem;
+    margin: 2rem 0;
+    width: 80%;
+}
+
+*/
+    .popUpButton {
+        flex-direction: row;
+    }
+
+
+    .popupCard {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+    }
+
+
+}

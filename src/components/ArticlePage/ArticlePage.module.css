@@ -1,0 +1,194 @@
+.column {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.commentCard {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  background-color: #fff;
+  border-radius: 10px;
+  color: #4d4d4d;
+  padding: 0.5rem;
+}
+
+.commentCard h3 {
+  font-weight: normal;
+  margin: 0.2rem;
+  color: #ff6f6f;
+}
+
+.commentCard a {
+  text-decoration-color: #ff6f6f;
+}
+
+.commentBody {
+  margin: 0.5rem;
+  background-color: #ffbbbb2a;
+  padding: 0.5rem;
+  width: 90%;
+  font-size: 0.9rem;
+}
+
+.commentButtons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  color: #ff6f6f;
+  margin: 1rem 0 0 0.5rem;
+}
+
+.commentButtons i {
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.commentButtons i:hover {
+  color: #ff6f6fc5;
+}
+
+.commentButtons p {
+  color: #ff6f6f;
+  margin: 0 1.5rem 0.5rem 0.5rem;
+}
+
+.commentButtons button {
+  background-color: inherit;
+  border: none;
+  color: hsl(0, 100%, 72%);
+  font-size: 0.9rem;
+  font-variant: small-caps;
+  min-width: 3rem;
+  cursor: pointer;
+  background-color: none;
+  margin: 0.5rem;
+}
+
+.commentButtons button:hover,
+.commentButtons button:active {
+  color: #ff6f6fd3;
+}
+
+.commentColumn {
+  width: 80%;
+  margin: auto;
+}
+
+.noComments {
+  color: #4d4d4d;
+  margin: auto;
+  text-align: center;
+  font-weight: normal;
+}
+
+.popupCard {
+  background-color: #ffbbbb2a;
+  border-radius: 10px;
+  color: #4d4d4d;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  min-width: 90%;
+  margin-left: 1rem;
+}
+
+.popUpButton {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.popUpButton button {
+  border: 0.2px solid #ff6f6f;
+  color: #ff6f6f;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  min-width: 7rem;
+  cursor: pointer;
+  background-color: #fff;
+  margin: 0.5rem;
+  padding: 0.2rem;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+  height: 2rem;
+}
+
+.popUpButton button:hover,
+.popUpButton button:active {
+  color: #ff6f6fc5;
+  background-color: rgba(255, 255, 255, 0.808);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+}
+
+.popUpButton button:active {
+  border: 0.2px solid #fff;
+  color: #fff;
+  background-color: #ff6f6f;
+}
+
+.popupCard textarea {
+  border: 0.2px solid #ff6f6f;
+  color: #4d4d4d;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  min-height: 5rem;
+  margin-right: 1rem;
+  overflow: auto;
+  padding: 0.5rem;
+  resize: none;
+  width: 20rem;
+}
+
+.popUpText {
+  color: #4d4d4dd0;
+  margin: 0.5rem 0 0.25rem 1.2rem;
+  font-size: 0.8rem;
+}
+
+.popUpText span {
+  color: #ff6f6fc2;
+}
+
+@media only screen and (max-width: 800px) {
+  .wrap {
+    width: 95%;
+  }
+
+  .commentColumn {
+    width: 95%;
+    margin: auto;
+  }
+
+  .popUpButton {
+    flex-direction: row;
+    margin: 1rem 0 0;
+  }
+
+  .popupCard {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 90%;
+  }
+
+  .commentCard {
+    padding: 0.3rem;
+  }
+
+  .commentCard h3 {
+    margin: 0.5rem;
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,195 @@
+.profilePage {
+    margin: 2rem auto;
+    width: 95%;
+}
+
+.articleCard {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .4);
+    background-color: #fff;
+    border-radius: 10px;
+    color: #4d4d4d;
+    margin: 2rem .5rem;
+    padding: 0.5rem;
+}
+
+
+.articleCard h5 {
+    margin: 1rem;
+    font-weight: normal;
+    font-size: .7rem;
+
+}
+
+
+.storyLink {
+    margin: 1rem;
+}
+
+
+.commentCard {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .4);
+    background-color: #fff;
+    border-radius: 10px;
+    color: #4d4d4d;
+    padding: 0.5rem;
+    margin: 1.5rem .5rem;
+}
+
+.commentCard h5 {
+    margin: 1rem;
+    font-weight: normal;
+    font-size: .7rem;
+}
+
+
+.title {
+    margin: .5rem 1rem;
+}
+
+.userName {
+    margin: .5rem 1rem 0;
+    font-size: .9rem;
+}
+
+.userName span a {
+    color: #FF6F6F;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.userName span {
+    color: #FF6F6F;
+    font-size: 1rem;
+    margin: 0;
+
+}
+
+
+.commentBody {
+    margin: .5rem 1rem 1rem;
+    background-color: #ffbbbb2a;
+    padding: 0.5rem;
+    width: 90%;
+    font-size: .9rem;
+}
+
+
+.commentButtons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    color: #FF6F6F;
+    margin: 1rem 0 1rem .5rem;
+}
+
+.commentButtons button {
+    border: none;
+    color: #FF6F6F;
+    border-radius: 2px;
+    font-size: .9rem;
+    font-variant: small-caps;
+    min-width: 3rem;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.commentButtons button:hover,
+.commentButtons button:active {
+    color: #ff6f6fc4;
+
+}
+
+.commentButtons i {
+    cursor: pointer;
+    margin-left: 0.6rem;
+}
+
+.navLink {
+    color: #FF6F6F;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: .9rem;
+    font-variant: small-caps;
+
+}
+
+.navLinkWithoutAuth {
+    color: #FF6F6F;
+    text-decoration: none;
+    margin-left: .5rem;
+    font-size: .9rem;
+    font-variant: small-caps;
+}
+
+.navLink:hover,
+.navLink:active {
+    color: #ff6f6fc4;
+}
+
+
+
+.commentButtons i:hover,
+.commentButtons i:active {
+    color: #ff6f6fc4;
+}
+
+
+
+.profilePickButtons {
+    display: flex;
+    flex-direction: row;
+
+}
+
+
+
+.profilePickButtons button {
+    border: .2px solid #FF6F6F;
+    color: #FF6F6F;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #fff;
+    margin: 1rem 1rem 1rem .5rem;
+    padding: 0.5rem;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .1);
+}
+
+
+.profilePickButtons button:hover,
+.profilePickButtons button:active {
+    color: #ff6f6fc5;
+    background-color: rgba(255, 255, 255, 0.808);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .15);
+}
+
+
+
+h3 {
+    margin: .5rem;
+    color: #4d4d4d;
+    font-weight: normal;
+}
+
+@media only screen and (max-width: 800px) {
+    .profilePickButtons {
+        justify-content: center;
+    }
+
+    .profilePickButtons button {
+        margin: .3rem;
+        max-width: 6.5rem;
+    }
+
+    h3 {
+        margin: 2rem .5rem;
+    }
+
+    .commentCard {
+        padding: 0.25rem;
+        margin: 2rem .5rem;
+    }
+
+
+
+}

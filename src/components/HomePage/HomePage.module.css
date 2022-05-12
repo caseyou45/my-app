@@ -1,0 +1,154 @@
+.column {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+
+.imageStyle {
+  position: relative;
+  text-align: center;
+  color: black;
+  width: 100%;
+
+}
+
+
+.imageStyle img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  filter: brightness(90%);
+
+}
+
+.imageStyle h4 {
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  left: 5px;
+  bottom: 5px;
+}
+
+
+
+
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.buttonRow div {
+  margin: 0 1rem 0;
+}
+
+
+.news {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 3rem auto;
+  width: 90%;
+}
+
+
+
+
+.newsCard {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .4);
+  color: #4d4d4d;
+  margin: 1.4rem 1rem;
+  padding: .5rem;
+  width: 35%;
+}
+
+
+
+.newsCard:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.cardColumn {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.newsCard i {
+  color: #FF6F6F;
+  margin-right: 0.75rem;
+}
+
+.newsCard i:hover {
+  color: #FF6F6F;
+  cursor: pointer;
+}
+
+.newsCard p {
+  color: #FF6F6F;
+}
+
+.cardColumn h4 {
+  font-weight: normal;
+  margin: 0.3rem;
+}
+
+.cardColumn h5 {
+  margin: 0.5rem 0.3rem;
+  font-variant: small-caps;
+  font-weight: normal;
+}
+
+.cardColumn h6 {
+  margin: 0 0.3rem 1rem;
+}
+
+.cardColumn a {
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .newsCard {
+    width: 100%;
+    margin: .5rem;
+
+  }
+
+  .news {
+    margin: 2rem auto;
+    width: 90%;
+  }
+}
+
+
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+
+
+  .news {
+    margin: 2rem auto;
+    width: 90%;
+  }
+
+}
