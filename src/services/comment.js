@@ -5,47 +5,74 @@ let token = null;
 
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
-  console.log(token);
 };
 
 const newComment = async (comment) => {
   const config = {
     headers: { Authorization: token },
   };
-  const returnedComment = await axios.post(baseUrl, comment);
-  return returnedComment;
+  return await axios.post(baseUrl, comment, config);
 };
 
 const deleteCommentService = async (id, deleteInfo) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const deletedComment = await axios.patch(
-    `${baseUrl}/delete/${id}`,
-    deleteInfo,
-    config
-  );
-
-  return deletedComment;
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+    return await axios.patch(`${baseUrl}/delete/${id}`, deleteInfo, config);
+  } catch (error) {
+    return error;
+  }
 };
 
 const editCommentService = async (id, editInfo) => {
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+
+    return await axios.patch(`${baseUrl}/edit/${id}`, editInfo, config);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getCommentsByAritcleID = async (id) => {
   const config = {
     headers: { Authorization: token },
   };
-  const editedComment = await axios.patch(
-    `${baseUrl}/edit/${id}`,
-    editInfo,
-    config
-  );
-
-  return editedComment;
+  return await axios.get(`${baseUrl}/${id}`, config);
 };
 
+const getCommentsMadeByUser = async (username) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  return await axios.get(`${baseUrl}/user/commented/${username}`, config);
+};
+
+const getCommentsLikedByUser = async (votes) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  let promises = [];
+
+  for (let i = 0; i < votes.data.length; i++) {
+    promises.push(
+      axios.get(`${baseUrl}/voted/${votes.data[i].commentid}`, config)
+    );
+  }
+
+  return Promise.all(promises);
+};
 let commentServices = {
   newComment,
   deleteCommentService,
   editCommentService,
+  getCommentsByAritcleID,
+  getCommentsMadeByUser,
+  getCommentsLikedByUser,
   setToken,
 };
 
