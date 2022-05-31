@@ -4,8 +4,11 @@ import NewsCard from "./NewsCard";
 
 import styles from "./HomePage.module.css";
 import articleServices from "../../services/article";
+import ErrorHandler from "../ErrorHandler/ErrorHandler";
+
 const Home = () => {
   const [news, setNews] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     fetchNews("general");
@@ -19,16 +22,20 @@ const Home = () => {
 
       setNews([...retrievedNewsFromDB]);
     } catch (error) {
-      console.log(error);
+      setErrorMessage(error);
     }
   };
   return (
     <div>
       <div className={styles.news}>
         {news.map((article) => (
-          <NewsCard article={article} key={article.articles_id} />
+          <NewsCard article={article} key={article.id} />
         ))}
       </div>
+      <ErrorHandler
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
     </div>
   );
 };

@@ -10,7 +10,6 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const stateStoredUser = useSelector((state) => state.user);
-
   useEffect(() => {
     document.addEventListener("click", handleOffClick);
     return () => {
@@ -47,18 +46,14 @@ const Navbar = () => {
   return (
     <ul className={styles.navBar}>
       <li className={styles.navLeft}>
-        <span
+        <button
           className={styles.menuIcon}
           onClick={(event) => {
             handleCategoryDropdown();
           }}
         >
-          {showDropdown === true ? (
-            <i className="lni lni-lg lni-close"></i>
-          ) : (
-            <i className="lni lni-lg lni-menu"></i>
-          )}
-        </span>
+          {showDropdown === true ? <span>&#9747;</span> : <span>&#9776;</span>}
+        </button>
         <div
           className={styles.dropdownContent}
           style={showDropdown ? { display: "block" } : { display: "none" }}
@@ -71,7 +66,7 @@ const Navbar = () => {
           ) : (
             <Link
               className={styles.authItem}
-              to={`/profile/${stateStoredUser.users_id}`}
+              to={`/profile/${stateStoredUser.id}`}
             >
               {stateStoredUser.username}
             </Link>
@@ -108,7 +103,7 @@ const Navbar = () => {
               onClick={(event) => {
                 handleCategoryDropdown();
               }}
-              to={`/article/category/:${el}`}
+              to={`/category/${el}`}
             >
               {el}
             </Link>
@@ -144,7 +139,7 @@ const Navbar = () => {
         <li className={styles.navRight}>
           <Link
             className={styles.navButton}
-            to={`/profile/${stateStoredUser.users_id}`}
+            to={`/profile/${stateStoredUser.username}`}
           >
             {stateStoredUser.username}
           </Link>

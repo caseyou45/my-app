@@ -11,7 +11,6 @@ const CategoryPage = () => {
 
   const [news, setNews] = useState([]);
   const [categoryChoice, setCategoryChoice] = useState(match.params.id);
-
   useEffect(() => {
     if (match.params.id !== categoryChoice || news.length === 0) {
       setCategoryChoice(match.params.id);
@@ -30,11 +29,12 @@ const CategoryPage = () => {
       console.log(error);
     }
   };
+
   return (
     <div>
       <div className={`${styles.news}`}>
         {news.map((article) => (
-          <NewsCard article={article} key={article.articles_id} />
+          <NewsCard article={article} key={article.id} />
         ))}
       </div>
     </div>

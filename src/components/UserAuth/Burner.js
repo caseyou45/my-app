@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import userService from "../../services/user";
+import userServices from "../../services/user";
 import commentServices from "../../services/comment";
 import voteServices from "../../services/vote";
 
@@ -32,17 +32,43 @@ const Burner = () => {
     const user = {
       username: `burner-${makeUsername(8)}`,
       password: makeUsername(20),
-      email: `burner-${makeUsername(10)}`,
     };
-    const newUser = await userService.signup(user);
-    if (newUser.name === "error") {
-      setMessage(newUser.detail);
-    } else {
-      window.localStorage.setItem("loggedForumUser", JSON.stringify(newUser));
-      commentServices.setToken(newUser.token);
-      voteServices.setToken(newUser.token);
-      dispatch(setStateUser(newUser));
-      history.push("/");
+
+    try {
+      await userServices.signup(user);
+
+      let loggedUser;
+
+      try {
+        loggedUser = await userServices.signin(user);
+      } catch (error) {
+        setMessage(error);
+      }
+
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
+      userServices.setToken(loggedUser.jwt);
+
+      let userDetails;
+
+      try {
+        userDetails = await userServices.details(user.username);
+
+        loggedUser.username = user.username;
+        loggedUser.id = userDetails.id;
+      } catch (error) {
+        setMessage(error);
+      }
+
+      window.localStorage.setItem(
+        "loggedForumUser",
+        JSON.stringify(loggedUser)
+      );
+
+      dispatch(setStateUser(loggedUser));
+      history("/");
+    } catch (error) {
+      setMessage(error);
     }
   };
 

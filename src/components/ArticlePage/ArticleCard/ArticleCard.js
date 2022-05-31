@@ -41,25 +41,23 @@ const ArticleCard = ({ setComments, article }) => {
     if (commentToPost !== "") {
       const newComment = {
         content: commentToPost,
-        author: stateStoredUser.users_id,
-        parent_comment: null,
-        parent_article: article.articles_id,
+        author: stateStoredUser.id,
+        date: new Date(),
+        pcomment: null,
+        particle: article.id,
+        username: stateStoredUser.username,
       };
 
-      await commentService
-        .newComment(newComment)
-        .then((res) => {
-          setComments((prev) => [...prev, ...res.data]);
-          handleCommentClose();
-          setCommentToPost("");
-        })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            handleCommentClose();
-            setErrorMessage(err.response.data.error);
-            setCommentToPost("");
-          }
-        });
+      try {
+        const res = await commentService.newComment(newComment);
+        setComments((prev) => [res.data, ...prev]);
+        handleCommentClose();
+        setCommentToPost("");
+      } catch (error) {
+        handleCommentClose();
+        setErrorMessage(error.response.statusText);
+        setCommentToPost("");
+      }
     }
   };
 

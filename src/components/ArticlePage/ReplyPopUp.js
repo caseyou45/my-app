@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import commentService from "../../services/comment";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
-const ReplyPopUp = ({ setOpenReply, comment, setReplies }) => {
+const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
   const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,20 +22,20 @@ const ReplyPopUp = ({ setOpenReply, comment, setReplies }) => {
     if (text !== "") {
       const newComment = {
         content: text,
-        author: stateStoredUser.users_id,
-        parent_comment: comment.comments_id,
-        parent_article: comment.parent_article,
+        author: stateStoredUser.id,
+        date: new Date(),
+        pcomment: comment.id,
+        particle: comment.particle,
+        username: stateStoredUser.username,
       };
 
-      await commentService
-        .newComment(newComment)
-        .then((res) => {
-          setReplies((prev) => [...prev, ...res.data]);
-          handlePopUpClose();
-        })
-        .catch((err) => {
-          setErrorMessage(err.response.data.error);
-        });
+      try {
+        const reply = await commentService.newComment(newComment);
+        setReplies((prev) => [reply.data, ...prev]);
+        handlePopUpClose();
+      } catch (error) {
+        setErrorMessage(error);
+      }
     }
   };
 

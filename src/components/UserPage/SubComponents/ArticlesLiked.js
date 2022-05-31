@@ -17,7 +17,7 @@ const ArticlesLiked = () => {
 
   const fetchUserComment = async (id) => {
     try {
-      const x = await axios.get(`/api/users/profile/likes/articles/${id}`);
+      const x = await axios.get(`/api/vote/${id}`);
       setArticlesLiked(x.data.filter((t) => t.comments_id === null));
     } catch (error) {}
   };

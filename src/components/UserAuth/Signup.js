@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import userService from "../../services/user";
+import userServices from "../../services/user";
 import commentServices from "../../services/comment";
 import voteServices from "../../services/vote";
 
@@ -19,6 +19,43 @@ const Signup = () => {
 
   const dispatch = useDispatch();
 
+  const setLocalAuth = (loggedUser) => {
+    window.localStorage.setItem("loggedForumUser", JSON.stringify(loggedUser));
+
+    dispatch(setStateUser(loggedUser));
+
+    history("/");
+  };
+
+  const getUserID = async (loggedUser) => {
+    try {
+      //token is set in the services so headers can be sent with JWT
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
+      userServices.setToken(loggedUser.jwt);
+
+      const userDetails = await userServices.details(loggedUser.username);
+      loggedUser.id = userDetails.id;
+      setLocalAuth(loggedUser);
+    } catch (error) {
+      setMessage(error.response.data);
+    }
+  };
+
+  const signIn = async (user) => {
+    try {
+      const loggedUser = await userServices.signin(user);
+
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
+      userServices.setToken(loggedUser.jwt);
+      loggedUser.username = user.username;
+      getUserID(loggedUser);
+    } catch (error) {
+      setMessage(error.response.data);
+    }
+  };
+
   const submitSignup = async () => {
     const user = {
       username: username,
@@ -27,33 +64,10 @@ const Signup = () => {
 
     if (submissionCheck(user) === true) {
       try {
-        //Sends request to sign up
-        await userService.signup(user);
-
-        //If signup request successful, makes a signin request
-        const loggedUser = await userService.signin(user);
-
-        //Add username to jwt that Springboot returns
-        loggedUser.username = user.username;
-
-        //saves that to localstorage
-        window.localStorage.setItem(
-          "loggedForumUser",
-          JSON.stringify(loggedUser)
-        );
-
-        //Also saves it to state
-        commentServices.setToken(loggedUser.jwt);
-        voteServices.setToken(loggedUser.jwt);
-        dispatch(setStateUser(loggedUser));
-        console.log(loggedUser);
-
-        history("/");
-        history("/");
+        await userServices.signup(user);
+        signIn(user);
       } catch (error) {
-        if (error.response.status === 500) {
-          setMessage("Username already in use.");
-        }
+        setMessage(error.response.data);
       }
     }
   };
@@ -109,8 +123,8 @@ const Signup = () => {
         <button className={styles.navButton} onClick={submitSignup}>
           Sign Up
         </button>
-        <NavLink className={styles.navLink} to="/login">
-          Login
+        <NavLink className={styles.navLink} to="/signin">
+          Sign In
         </NavLink>
         <NavLink className={styles.navLink} to="/burner">
           Make a Burner

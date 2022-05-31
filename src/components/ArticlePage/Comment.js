@@ -15,13 +15,11 @@ const Comment = ({
   comment,
   subStyle,
   article,
-  allVotes,
   comments,
   setComments,
   replies,
   setReplies,
   deleteComment,
-  setAllVotes,
 }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openReply, setOpenReply] = useState(false);
@@ -33,22 +31,23 @@ const Comment = ({
   const stateStoredUser = useSelector((state) => state.user);
 
   useEffect(() => {
-    const thisCommentsVotes = allVotes.filter(
-      (el) => el.comments_id === comment.comments_id
+    fetchVotes();
+  }, []);
+
+  const fetchVotes = async () => {
+    const thisCommentsVotes = await voteServices.getVotesByCommentID(
+      comment.id
+    );
+    setVoteTotalForComment(thisCommentsVotes.data.length);
+
+    const vote = thisCommentsVotes.data.find(
+      (el) => el.author === stateStoredUser.id
     );
 
-    setVoteTotalForComment(thisCommentsVotes.length);
-
-    const vote = allVotes.find(
-      (el) =>
-        el.comments_id === comment.comments_id &&
-        el.author === stateStoredUser.users_id
-    );
     if (vote) {
       setUserVote(vote);
     }
-  }, [allVotes, comment.comments_id, stateStoredUser.users_id]);
-
+  };
   const handleCardStyle = (x) => {
     return {
       marginTop: "1rem",
@@ -62,29 +61,29 @@ const Comment = ({
     if (userVote === null) {
       const vote = {
         vote: 1,
-        articles_id: article.articles_id,
-        comments_id: comment.comments_id,
-        author: stateStoredUser.users_id,
+        articleid: article.id,
+        commentid: comment.id,
+        author: stateStoredUser.id,
       };
       voteServices
         .addVoteService(vote)
         .then((response) => {
-          setUserVote(response.data[0]);
+          setUserVote(response.data);
           setVoteTotalForComment(voteTotalForComment + 1);
         })
         .catch((error) => {
-          setErrorMessage(error.response.data.error);
+          setErrorMessage(error.response.data);
         });
     }
     if (userVote !== null) {
       voteServices
-        .removeVoteService(userVote.votes_id)
+        .removeVoteService(userVote)
         .then((response) => {
           setUserVote(null);
           setVoteTotalForComment(voteTotalForComment - 1);
         })
         .catch((error) => {
-          setErrorMessage(error.response.data.error);
+          setErrorMessage(error.response.data);
         });
     }
   };
@@ -117,24 +116,51 @@ const Comment = ({
     } else return false;
   };
 
+  const HandleDisplayTime = (date) => {
+    let time;
+    const now = new Date();
+    const postTime = new Date(date.time);
+    const diffTime = Math.abs(postTime - now);
+    const diffMin = Math.ceil(diffTime / (1000 * 60));
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 1) {
+      time = `${diffDays} days ago`;
+    }
+
+    if (diffDays === 1) {
+      time = `${diffDays} day ago`;
+    }
+
+    if (diffHours < 24) {
+      time = `${diffHours} hours ago`;
+      if (diffHours === 1) {
+        time = `${diffHours} hour ago`;
+      }
+    }
+
+    if (diffMin < 60) {
+      time = `${diffMin} mins ago`;
+      if (diffMin === 1) {
+        time = `${diffMin} min ago`;
+      }
+    }
+
+    return <span className={styles.commentTime}>Posted : {time}</span>;
+  };
+
   const CommentButtonHanlder = () => {
     if (comment.author === 5) {
       return <div className={styles.commentButtons}></div>;
     }
 
-    if (comment.author !== stateStoredUser.users_id) {
+    if (comment.author !== stateStoredUser.id) {
       return (
         <div className={styles.commentButtons}>
           {userVote !== null ? (
-            <i
-              onClick={() => handleVote(article)}
-              className="lni lni-lg lni-heart-filled"
-            ></i>
+            <i onClick={() => handleVote(article)}> &#9829;</i>
           ) : (
-            <i
-              onClick={() => handleVote(article)}
-              className="lni lni-lg lni-heart"
-            ></i>
+            <i onClick={() => handleVote(article)}>&#9825;</i>
           )}
           <p>{voteTotalForComment}</p>
           <button name="reply" onClick={(event) => handleReplyPopUpOpen(event)}>
@@ -146,21 +172,15 @@ const Comment = ({
       return (
         <div className={styles.commentButtons}>
           {userVote !== null ? (
-            <i
-              onClick={() => handleVote(article)}
-              className="lni lni-lg lni-heart-filled"
-            ></i>
+            <i onClick={() => handleVote(article)}> &#9829;</i>
           ) : (
-            <i
-              onClick={() => handleVote(article)}
-              className="lni lni-lg lni-heart"
-            ></i>
+            <i onClick={() => handleVote(article)}> &#9825;</i>
           )}
           <p>{voteTotalForComment}</p>
           <button name="reply" onClick={(event) => handleReplyPopUpOpen(event)}>
             Reply
           </button>
-          {comment.author === stateStoredUser.users_id && (
+          {comment.author === stateStoredUser.id && (
             <div>
               <button name="delete" onClick={(event) => deleteComment(comment)}>
                 Delete
@@ -180,12 +200,19 @@ const Comment = ({
     <div>
       <div style={handleCardStyle(subStyle)} className={styles.commentCard}>
         <div>
-          <Link
-            className={styles.navButton}
-            to={`/profile/${comment.users_id}`}
-          >
+          {comment.author !== 5 ? (
+            <Link
+              className={styles.navButton}
+              to={`/profile/${comment.username}`}
+            >
+              <h3>{comment.username}</h3>
+            </Link>
+          ) : (
             <h3>{comment.username}</h3>
-          </Link>
+          )}
+          <span>
+            {comment.author !== 5 && <HandleDisplayTime time={comment.date} />}
+          </span>
           <p className={styles.commentBody}>{comment.content}</p>
         </div>
         <CommentButtonHanlder />
@@ -197,6 +224,7 @@ const Comment = ({
             comment={comment}
             setReplies={setReplies}
             setComments={setComments}
+            article={article}
           />
         )}
         {openReply && (
@@ -207,19 +235,18 @@ const Comment = ({
             comment={comment}
             setReplies={setReplies}
             setComments={setComments}
+            article={article}
           />
         )}
       </div>
 
       {replies.map(
         (el, index) =>
-          el.parent_comment === comment.comments_id && (
+          el.pcomment === comment.id && (
             <Comment
               key={index}
               subStyle={subStyle + 0.75}
               comment={el}
-              allVotes={allVotes}
-              setAllVotes={setAllVotes}
               deleteComment={deleteComment}
               setReplies={setReplies}
               setComments={setComments}

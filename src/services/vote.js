@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "/api/votes";
+const baseUrl = "/api/vote";
 
 let token = null;
 
@@ -11,23 +11,36 @@ const addVoteService = async (vote) => {
   const config = {
     headers: { Authorization: token },
   };
-  const returnedVote = await axios.post(baseUrl, vote, config);
-  return returnedVote;
+  return await axios.post(baseUrl, vote, config);
 };
 
-const removeVoteService = async (id) => {
+const removeVoteService = async (vote) => {
   const config = {
     headers: { Authorization: token },
   };
 
-  const deletedVote = await axios.delete(`${baseUrl}/${id}`, config);
+  return await axios.post(baseUrl + "/delete", vote, config);
+};
 
-  return deletedVote;
+const getVotesByCommentID = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  return await axios.get(`${baseUrl}/${id}`, config);
+};
+
+const getVotesByUsername = async (username) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  return await axios.get(`${baseUrl}/${username}`, config);
 };
 
 const voteServices = {
   addVoteService,
   removeVoteService,
+  getVotesByCommentID,
+  getVotesByUsername,
   setToken,
 };
 

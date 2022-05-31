@@ -13,7 +13,7 @@ const UserPage = () => {
   const [likedComments, setLikedComments] = useState(false);
   const [likedArticles, setLikedArticles] = useState(false);
   const stateStoredUser = useSelector((state) => state.user);
-  const urlID = Number(useMatch("/profile/:id").params.id);
+  const urlUsername = useMatch("/profile/:username").params.username;
 
   const pickDisplay = (e) => {
     const { value } = e.target;
@@ -45,18 +45,20 @@ const UserPage = () => {
           }}
           value="madeComments"
         >
-          {stateStoredUser.users_id === urlID ? "Made Comments" : "Comments"}
+          {stateStoredUser.username === urlUsername
+            ? "Made Comments"
+            : "Comments"}
         </button>
-        {stateStoredUser.users_id === urlID && (
+        {stateStoredUser.username === urlUsername && (
           <div>
-            <button
+            {/* <button
               onClick={(e) => {
                 pickDisplay(e);
               }}
               value="likedArticles"
             >
               Liked Articles
-            </button>
+            </button> */}
             <button
               onClick={(e) => {
                 pickDisplay(e);
@@ -69,11 +71,17 @@ const UserPage = () => {
         )}
       </div>
       {likedComments && (
-        <CommentsLiked urlID={urlID} stateStoredUser={stateStoredUser} />
+        <CommentsLiked
+          urlUsername={urlUsername}
+          stateStoredUser={stateStoredUser}
+        />
       )}
-      {likedArticles && <ArticlesLiked />}
+      {/* {likedArticles && <ArticlesLiked />} */}
       {madeComments && (
-        <CommentsMade urlID={urlID} stateStoredUser={stateStoredUser} />
+        <CommentsMade
+          urlUsername={urlUsername}
+          stateStoredUser={stateStoredUser}
+        />
       )}
     </div>
   );

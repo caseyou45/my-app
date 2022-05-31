@@ -7,17 +7,17 @@ import commentServices from "../../../services/comment";
 
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
-const CommentsMade = ({ urlID, stateStoredUser }) => {
+const CommentsMade = ({ urlUsername, stateStoredUser }) => {
   const [comments, setComments] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    fetchUserComment(urlID);
-  }, [urlID]);
+    fetchUserComment(urlUsername);
+  }, [urlUsername]);
 
-  const fetchUserComment = async (id) => {
+  const fetchUserComment = async (urlUsername) => {
     try {
-      const x = await axios.get(`/api/users/profile/comments/${id}`);
+      const x = await commentServices.getCommentsMadeByUser(urlUsername);
       setComments(x.data);
     } catch (error) {}
   };
@@ -61,14 +61,9 @@ const CommentsMade = ({ urlID, stateStoredUser }) => {
       };
 
       try {
-        await commentServices.deleteCommentService(
-          comment.comments_id,
-          deleteInfo
-        );
+        await commentServices.deleteCommentService(comment.id, deleteInfo);
 
-        let result = comments.filter(
-          (el) => el.comments_id !== comment.comments_id
-        );
+        let result = comments.filter((el) => el.id !== comment.id);
         setComments(result);
       } catch (error) {
         setErrorMessage(error.response.data.error);
@@ -77,18 +72,18 @@ const CommentsMade = ({ urlID, stateStoredUser }) => {
 
     return (
       <div className={styles.commentButtons}>
-        {stateStoredUser.users_id === urlID && (
+        {stateStoredUser.username === urlUsername && (
           <button name="delete" onClick={(event) => deleteComment(el)}>
             Delete
           </button>
         )}
         <NavLink
           className={
-            stateStoredUser.users_id === urlID
+            stateStoredUser.username === urlUsername
               ? styles.navLink
               : styles.navLinkWithoutAuth
           }
-          to={`/articles/${el.articles_id}`}
+          to={`/article/id/${el.particle}`}
         >
           Go to Full Post
         </NavLink>
@@ -99,7 +94,7 @@ const CommentsMade = ({ urlID, stateStoredUser }) => {
   return (
     <div>
       <h3>
-        {stateStoredUser.users_id !== urlID
+        {stateStoredUser.username !== urlUsername
           ? "Comments"
           : "Comments You've Made"}
       </h3>
@@ -109,13 +104,13 @@ const CommentsMade = ({ urlID, stateStoredUser }) => {
             <p className={styles.title}>{el.title}</p>
             <p className={styles.userName}>
               <span>
-                {stateStoredUser.users_id !== urlID
+                {stateStoredUser.username !== urlUsername
                   ? ` ${el.username}  `
                   : "You "}
               </span>
               wrote :
             </p>
-            <p className={styles.commentBody}>{el.comment}</p>
+            <p className={styles.commentBody}>{el.content}</p>
             <MadeDate el={el} />
             <DeleteDisplay el={el} />
           </div>

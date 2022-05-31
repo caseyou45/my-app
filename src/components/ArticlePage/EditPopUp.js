@@ -4,14 +4,7 @@ import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 import commentService from "../../services/comment";
 
-const EditPopUp = ({
-  setOpenEdit,
-  replies,
-  comments,
-  comment,
-  setComments,
-  setReplies,
-}) => {
+const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
   const [text, setText] = useState(comment.content);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -20,35 +13,27 @@ const EditPopUp = ({
     setOpenEdit(false);
   };
 
-  const editComment = (event) => {
+  const editComment = async (event) => {
     event.preventDefault();
 
-    const newComment = {
-      content: text,
-    };
+    comment.content = text;
 
-    commentService
-      .editCommentService(comment.comments_id, newComment)
-      .then((response) => {
-        const comment = response.data;
-        if (comment.parent_comment === null) {
-          let result = comments.filter(
-            (el) => el.comments_id !== comment.comments_id
-          );
-          setComments([...result, comment]);
-          handlePopUpClose();
-        }
-        if (comment.parent_comment !== null) {
-          let result = replies.filter(
-            (el) => el.comments_id !== comment.comments_id
-          );
-          setReplies([...result, comment]);
-          handlePopUpClose();
-        }
-      })
-      .catch((error) => {
-        setErrorMessage(error.response.data.error);
-      });
+    try {
+      const res = await commentService.editCommentService(comment.id, comment);
+      const editedComment = res.data;
+
+      if (comment.pcomment === null) {
+        const result = comments.find((el) => el.id === comment.id);
+        result.content = editedComment.content;
+        handlePopUpClose();
+      } else {
+        const result = replies.find((el) => el.id === comment.id);
+        result.content = editedComment.content;
+        handlePopUpClose();
+      }
+    } catch (error) {
+      setErrorMessage(error.response.statusText);
+    }
   };
 
   return (

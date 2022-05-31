@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useMatch } from "react-router-dom";
 import ArticelCard from "./ArticleCard/ArticleCard";
@@ -15,7 +14,6 @@ const ArticlePage = () => {
   const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState([]);
 
-  const [allVotes, setAllVotes] = useState([]);
   const [load, setLoad] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,26 +23,27 @@ const ArticlePage = () => {
   useEffect(() => {
     const getArticleandCommentsVotes = async () => {
       try {
-        // Get Everything
+        // Get Article
         const article = await articleServices.articleById(match.params.id);
 
-        // // Set Article
+        // Set Article
         setArticle(article);
-
-        // // // Set Comments
-        // setComments(
-        //   combo.data.comments.filter((el) => el.parent_comment === null)
-        // );
-        // setReplies(
-        //   combo.data.comments.filter((el) => el.parent_comment !== null)
-        // );
-
-        // // // Get Votes
-        // setAllVotes(combo.data.votes);
 
         setLoad(true);
       } catch (error) {
-        console.log(error);
+        setErrorMessage(error.response.statusText);
+      }
+
+      // Get Comments
+      try {
+        const comments = await commentServices.getCommentsByAritcleID(
+          match.params.id
+        );
+        setComments(comments.data.filter((el) => el.pcomment == null));
+
+        setReplies(comments.data.filter((el) => el.pcomment !== null));
+      } catch (error) {
+        setErrorMessage(error.response.statusText);
       }
     };
 
@@ -52,31 +51,24 @@ const ArticlePage = () => {
   }, [load, match.params.id]);
 
   const deleteComment = async (comment) => {
-    const deleteInfo = {
-      author: 5,
-      content: "comment removed",
-    };
+    comment.username = "removed";
+    comment.content = "comment removed";
 
     try {
       const removedComment = await commentServices.deleteCommentService(
-        comment.comments_id,
-        deleteInfo
+        comment.id,
+        comment
       );
 
-      if (comment.parent_comment === null) {
-        let result = comments.filter(
-          (el) => el.comments_id !== comment.comments_id
-        );
+      if (comment.pcomment === null) {
+        let result = comments.filter((el) => el.id !== comment.id);
         setComments([...result, removedComment.data]);
-      }
-      if (comment.parent_comment !== null) {
-        let result = replies.filter(
-          (el) => el.comments_id !== comment.comments_id
-        );
+      } else {
+        let result = replies.filter((el) => el.id !== comment.id);
         setReplies([...result, removedComment.data]);
       }
     } catch (error) {
-      setErrorMessage(error.response.data.error);
+      setErrorMessage(error.response.statusText);
     }
   };
 
@@ -93,13 +85,11 @@ const ArticlePage = () => {
             <div className={styles.commentColumn}>
               {comments.map(
                 (com, index) =>
-                  com.parent_article === article.articles_id && (
+                  com.particle === article.id && (
                     <div key={index}>
                       <Comment
                         subStyle={0}
                         comment={com}
-                        allVotes={allVotes}
-                        setAllVotes={setAllVotes}
                         deleteComment={deleteComment}
                         setReplies={setReplies}
                         setComments={setComments}

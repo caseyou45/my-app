@@ -5,19 +5,23 @@ import styles from "../UserPage.module.css";
 import { NavLink } from "react-router-dom";
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 import voteServices from "../../../services/vote";
+import commentServices from "../../../services/comment";
 
-const CommentsLiked = ({ urlID, stateStoredUser }) => {
+const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
   const [commentsLiked, setCommentsLiked] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    fetchUserComment(urlID);
-  }, [urlID]);
+    fetchUserComment(urlUsername);
+  }, [urlUsername]);
 
-  const fetchUserComment = async (id) => {
+  const fetchUserComment = async (urlUsername) => {
     try {
-      const x = await axios.get(`/api/users/profile/likes/comments/${id}`);
-      setCommentsLiked(x.data.filter((t) => t.comments_id !== null));
+      const votes = await voteServices.getVotesByUsername(urlUsername);
+
+      const likedComments = await commentServices.getCommentsLikedByUser(votes);
+      console.log(likedComments);
+      setCommentsLiked(likedComments.data.filter((t) => t.data.id !== null));
     } catch (error) {}
   };
 
@@ -58,7 +62,7 @@ const CommentsLiked = ({ urlID, stateStoredUser }) => {
       voteServices
         .removeVoteService(id)
         .then(() => {
-          let x = commentsLiked.filter((a) => a.votes_id !== el.votes_id);
+          let x = commentsLiked.filter((a) => a.id !== el.id);
           setCommentsLiked(x);
         })
         .catch((error) => {

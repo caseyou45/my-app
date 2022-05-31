@@ -15,6 +15,7 @@ import voteService from "./services/vote";
 import commentService from "./services/comment";
 import { setStateUser } from "./reducers/userReducer";
 import { Routes, Route } from "react-router-dom";
+import userServices from "./services/user";
 
 const App = (props) => {
   const dispatch = useDispatch();
@@ -24,8 +25,9 @@ const App = (props) => {
 
     if (loggedUserJSON) {
       const memoryStoredUser = JSON.parse(loggedUserJSON);
-      voteService.setToken(memoryStoredUser.token);
-      commentService.setToken(memoryStoredUser.token);
+      voteService.setToken(memoryStoredUser.jwt);
+      commentService.setToken(memoryStoredUser.jwt);
+      userServices.setToken(memoryStoredUser.jwt);
       dispatch(setStateUser(memoryStoredUser));
     }
   });
@@ -33,17 +35,12 @@ const App = (props) => {
     <div className="page-wrap">
       <Navbar />
       <Routes>
-        {/* <Route path="/profile/:id">
-          <UserPage />
-        </Route>{" "} */}
+        <Route path="/profile/:id" element={<UserPage />} />
         <Route path="/article/id/:id" element={<ArticlePage />} />
         <Route path="/signin" element={<Login />} />
-
-        {/* <Route path="/burner">
-          <Burner />
-        </Route> */}
+        <Route path="/burner" element={<Burner />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/article/category/:category" element={<CategoryPage />} />
+        <Route path="/category/:category" element={<CategoryPage />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </div>

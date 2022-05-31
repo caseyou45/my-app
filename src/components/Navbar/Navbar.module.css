@@ -6,7 +6,6 @@
   margin: 1rem 0 0;
   position: absolute;
   z-index: 1;
-
 }
 
 .logo {
@@ -14,7 +13,7 @@
   float: left;
   font-size: 1.5rem;
   font-variant: small-caps;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
   letter-spacing: 1.8px;
   margin: 1.35rem 0 1rem 1.5rem;
   text-decoration: none;
@@ -25,16 +24,14 @@
   color: rgba(255, 255, 255, 0.808);
 }
 
-
-
 .item:hover {
-  background-color: #FF6F6F;
+  background-color: #ff6f6f;
   color: #fff;
 }
 
 .item {
   border-bottom: 2px solid #e2e2e236;
-  color: #FF6F6F;
+  color: #ff6f6f;
   display: block;
   padding: 1rem;
   text-align: center;
@@ -44,7 +41,7 @@
 
 .authItem {
   border-bottom: 2px solid #e2e2e236;
-  color: #FF6F6F;
+  color: #ff6f6f;
   display: none;
   padding: 1.2rem 1rem;
   text-align: center;
@@ -57,14 +54,13 @@
 }
 
 .navBar {
-  background-color: #FF6F6F;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .4);
+  background-color: #ff6f6f;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
   color: #fff;
   list-style-type: none;
   margin: 0;
   overflow: hidden;
   padding: 0;
-
 }
 
 .navLeft {
@@ -72,16 +68,15 @@
   margin: 1rem 0 1rem 0;
 }
 
-
 .navButton {
   box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.1);
-  border: .2px solid #fff;
+  border: 0.2px solid #fff;
   text-decoration: none;
   text-align: center;
-  background-color: #FF6F6F;
+  background-color: #ff6f6f;
   border-radius: 4px;
   color: #fff;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .navButton:hover,
@@ -89,7 +84,6 @@
   background-color: #ff6f6fd0;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
   color: rgba(255, 255, 255, 0.808);
-
 }
 
 .navRight {
@@ -98,40 +92,41 @@
   display: block;
 }
 
-.menuIcon i {
+.menuIcon {
+  background-color: inherit;
+  border: none;
+  color: white;
+  margin-right: 2rem;
+  width: 20px;
+}
+.menuIcon span {
   font-size: 1.5rem;
-  padding: .5rem 0 0 1.5rem;
+  padding: 0.5rem 0 0 1.5rem;
+  width: 20px;
 }
 
-.menuIcon i:hover {
+.menuIcon span:hover {
   color: rgba(255, 255, 255, 0.808);
   cursor: pointer;
-
 }
-
-
 
 @media only screen and (max-width: 800px) {
   .navRight {
     float: right;
-    margin: 1.25rem .5rem;
+    margin: 1.25rem 0.5rem;
   }
 
-
   .navButton {
-    padding: .3rem .5rem;
-
+    padding: 0.3rem 0.5rem;
   }
 
   .navButtonUser {
-    padding: .3rem .5rem;
-
+    padding: 0.3rem 0.5rem;
   }
 
   .dropdownContent {
     margin: 1rem 0 0;
     width: 100%;
-
   }
 
   .item {

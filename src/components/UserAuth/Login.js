@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { setStateUser } from "../../reducers/userReducer";
-import userService from "../../services/user";
+import userServices from "../../services/user";
 import commentServices from "../../services/comment";
 import voteServices from "../../services/vote";
 
@@ -16,6 +16,31 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
 
+  const setLocalAuth = (loggedUser) => {
+    window.localStorage.setItem("loggedForumUser", JSON.stringify(loggedUser));
+
+    dispatch(setStateUser(loggedUser));
+
+    history("/");
+  };
+
+  const getUserID = async (loggedUser) => {
+    try {
+      //token is set in the services so headers can be sent with JWT
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
+      userServices.setToken(loggedUser.jwt);
+
+      const userDetails = await userServices.details(loggedUser.username);
+      console.log(userDetails);
+
+      loggedUser.id = userDetails.id;
+      setLocalAuth(loggedUser);
+    } catch (error) {
+      setMessage(error.response.data);
+    }
+  };
+
   const submitSignIn = async () => {
     const user = {
       username: username,
@@ -23,22 +48,11 @@ const Login = () => {
     };
 
     try {
-      const loggedUser = await userService.signin(user);
+      const loggedUser = await userServices.signin(user);
       loggedUser.username = user.username;
-
-      window.localStorage.setItem(
-        "loggedForumUser",
-        JSON.stringify(loggedUser)
-      );
-
-      commentServices.setToken(loggedUser.jwt);
-      voteServices.setToken(loggedUser.jwt);
-      dispatch(setStateUser(loggedUser));
-      console.log(loggedUser);
-      history("/");
+      getUserID(loggedUser);
     } catch (error) {
-      console.log(error);
-      // setMessage(error.response.data);
+      setMessage(error.response.data);
     }
   };
 
