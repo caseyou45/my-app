@@ -9,7 +9,7 @@ import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
 const CommentsMade = ({ urlUsername, stateStoredUser }) => {
   const [comments, setComments] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchUserComment(urlUsername);
@@ -63,10 +63,9 @@ const CommentsMade = ({ urlUsername, stateStoredUser }) => {
       try {
         await commentServices.deleteCommentService(comment.id, deleteInfo);
 
-        let result = comments.filter((el) => el.id !== comment.id);
-        setComments(result);
+        setComments((prev) => prev.filter((el) => el.id !== comment.id));
       } catch (error) {
-        setErrorMessage(error.response.data.error);
+        setError(error);
       }
     };
 
@@ -116,10 +115,7 @@ const CommentsMade = ({ urlUsername, stateStoredUser }) => {
           </div>
         ))}
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

@@ -10,7 +10,7 @@ const ArticleCard = ({ setComments, article }) => {
   const [commentToPost, setCommentToPost] = useState("");
   const stateStoredUser = useSelector((state) => state.user);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   const checkAuth = () => {
     if (stateStoredUser) {
@@ -24,7 +24,7 @@ const ArticleCard = ({ setComments, article }) => {
         setOpenComment(true);
       }
     } else {
-      setErrorMessage("You need to be logged in.");
+      setError("You need to be logged in.");
     }
   };
 
@@ -55,7 +55,7 @@ const ArticleCard = ({ setComments, article }) => {
         setCommentToPost("");
       } catch (error) {
         handleCommentClose();
-        setErrorMessage(error.response.statusText);
+        setError(error);
         setCommentToPost("");
       }
     }
@@ -95,10 +95,7 @@ const ArticleCard = ({ setComments, article }) => {
           )}
         </div>
       )}
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

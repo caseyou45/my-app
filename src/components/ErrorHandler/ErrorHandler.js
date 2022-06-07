@@ -1,16 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import styles from "./LoginModal.module.css";
 import { NavLink } from "react-router-dom";
 
-const ErrorHandler = ({ errorMessage, setErrorMessage }) => {
-  useEffect(() => {
-    errorMessage !== ""
-      ? (document.body.style.overflow = "hidden")
-      : (document.body.style.overflow = "unset");
-  }, [errorMessage]);
+const ErrorHandler = ({ error, setError }) => {
+  const stateStoredUser = useSelector((state) => state.user);
 
-  if (errorMessage === "") return <div>{null}</div>;
+  const [errorDisplay, setErrorDisplay] = useState("");
+
+  useEffect(() => {
+    if (error === "") {
+      document.body.style.overflow = "auto";
+    } else {
+      if (
+        error.response &&
+        error.response.status === 403 &&
+        stateStoredUser.username.startsWith("burner")
+      ) {
+        setErrorDisplay("Burner Account Has Expired");
+      }
+      if (stateStoredUser === "") {
+        setErrorDisplay("Please Log In");
+      } else {
+        setErrorDisplay("Something Went Wrong");
+      }
+      document.body.style.overflow = "hidden";
+    }
+  }, [error, stateStoredUser]);
+
+  if (error === "") return <div>{null}</div>;
   else
     return (
       <div className={styles.column}>
@@ -20,14 +39,14 @@ const ErrorHandler = ({ errorMessage, setErrorMessage }) => {
               <button
                 className={styles.escape}
                 onClick={() => {
-                  setErrorMessage("");
+                  setError("");
                 }}
               >
                 x
               </button>
               <h2>Uh oh!</h2>
               <div className={styles.message}>
-                <p>Error: {errorMessage}</p>
+                <p>Error: {errorDisplay}</p>
               </div>
               <NavLink className={`${styles.navLink}`} to="/signin">
                 Login

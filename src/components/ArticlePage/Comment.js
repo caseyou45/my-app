@@ -26,7 +26,7 @@ const Comment = ({
 
   const [voteTotalForComment, setVoteTotalForComment] = useState(0);
   const [userVote, setUserVote] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   const stateStoredUser = useSelector((state) => state.user);
 
@@ -72,7 +72,7 @@ const Comment = ({
           setVoteTotalForComment(voteTotalForComment + 1);
         })
         .catch((error) => {
-          setErrorMessage(error.response.data);
+          setError(error);
         });
     }
     if (userVote !== null) {
@@ -83,14 +83,14 @@ const Comment = ({
           setVoteTotalForComment(voteTotalForComment - 1);
         })
         .catch((error) => {
-          setErrorMessage(error.response.data);
+          setError(error);
         });
     }
   };
 
   const handleEditPopUpOpen = (event) => {
     if (checkAuth() !== true) {
-      setErrorMessage("You are not logged in.");
+      setError({ "error.response.status": 403 });
     } else {
       if (openReply) {
         setOpenReply(false);
@@ -101,7 +101,7 @@ const Comment = ({
 
   const handleReplyPopUpOpen = (event) => {
     if (checkAuth() !== true) {
-      setErrorMessage("You are not logged in.");
+      setError({ "error.response.status": 403 });
     } else {
       if (openEdit) {
         setOpenEdit(false);
@@ -256,10 +256,7 @@ const Comment = ({
             />
           )
       )}
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

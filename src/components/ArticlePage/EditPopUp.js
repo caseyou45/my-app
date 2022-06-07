@@ -6,7 +6,7 @@ import commentService from "../../services/comment";
 
 const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
   const [text, setText] = useState(comment.content);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handlePopUpClose = (event) => {
     setText("");
@@ -32,7 +32,7 @@ const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
         handlePopUpClose();
       }
     } catch (error) {
-      setErrorMessage(error.response.statusText);
+      setError(error);
     }
   };
 
@@ -49,10 +49,7 @@ const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
           <button onClick={handlePopUpClose}>Cancel</button>
         </div>
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

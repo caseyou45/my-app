@@ -1,4 +1,5 @@
 import axios from "axios";
+const baseUrl = "/api/user";
 
 let token = null;
 
@@ -7,12 +8,12 @@ const setToken = (newToken) => {
 };
 
 const signup = async (user) => {
-  const response = await axios.post("/api/user/auth/signup", user);
+  const response = await axios.post(baseUrl + "/auth/signup", user);
   return response.data;
 };
 
 const signin = async (user) => {
-  const response = await axios.post("/api/user/auth/signin", user);
+  const response = await axios.post(baseUrl + "/auth/signin", user);
   return response.data;
 };
 
@@ -21,7 +22,7 @@ const details = async (username) => {
     headers: { Authorization: token },
   };
 
-  const user = await axios.get(`/api/user/details/${username}`, config);
+  const user = await axios.get(baseUrl + "/details/" + username, config);
   return user.data;
 };
 

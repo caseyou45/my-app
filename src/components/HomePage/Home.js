@@ -8,7 +8,7 @@ import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 const Home = () => {
   const [news, setNews] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchNews("general");
@@ -22,7 +22,7 @@ const Home = () => {
 
       setNews([...retrievedNewsFromDB]);
     } catch (error) {
-      setErrorMessage(error);
+      setError(error);
     }
   };
   return (
@@ -32,10 +32,7 @@ const Home = () => {
           <NewsCard article={article} key={article.id} />
         ))}
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

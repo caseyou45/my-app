@@ -9,7 +9,7 @@ import commentServices from "../../../services/comment";
 
 const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
   const [commentsLiked, setCommentsLiked] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchUserComment(urlUsername);
@@ -20,9 +20,15 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
       const votes = await voteServices.getVotesByUsername(urlUsername);
 
       const likedComments = await commentServices.getCommentsLikedByUser(votes);
-      console.log(likedComments);
-      setCommentsLiked(likedComments.data.filter((t) => t.data.id !== null));
-    } catch (error) {}
+
+      for (let index = 0; index < likedComments.length; index++) {
+        likedComments[index].data.id = votes.data[index].id;
+      }
+
+      setCommentsLiked(likedComments);
+    } catch (error) {
+      setError(error);
+    }
   };
 
   const LikedDate = ({ el }) => {
@@ -58,32 +64,28 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
 
   const VoteDisplay = ({ el }) => {
     const userVote = false;
-    const handleVote = (id) => {
+    const handleVote = (el) => {
       voteServices
-        .removeVoteService(id)
+        .removeVoteService(el)
         .then(() => {
-          let x = commentsLiked.filter((a) => a.id !== el.id);
-          setCommentsLiked(x);
+          setCommentsLiked(commentsLiked.filter((a) => a.data.id !== el.id));
         })
         .catch((error) => {
-          setErrorMessage(error.response.data.error);
+          setError(error);
         });
     };
 
     return (
       <div className={styles.commentButtons}>
         {userVote !== true ? (
-          <i
-            onClick={() => handleVote(el.votes_id)}
-            className="lni lni-lg lni-heart-filled"
-          ></i>
+          <i onClick={() => handleVote(el)}>&#9829;</i>
         ) : (
-          <i
-            onClick={() => handleVote(el.votes_id)}
-            className="lni lni-lg lni-heart"
-          ></i>
+          <i onClick={() => handleVote(el)} className="lni lni-lg lni-heart">
+            &#9825;
+          </i>
         )}
-        <NavLink className={styles.navLink} to={`/articles/${el.articles_id}`}>
+
+        <NavLink className={styles.navLink} to={`/articles/${el.particle}`}>
           Go to Full Post
         </NavLink>
       </div>
@@ -95,27 +97,23 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
       <div>
         {commentsLiked.map((el, index) => (
           <div className={styles.commentCard}>
-            <p className={styles.title}>{el.title}</p>
             <p className={styles.userName}>
               <span>
-                {el.author !== stateStoredUser.users_id ? (
-                  <a href={`/profile/${el.author}`}> {el.username}</a>
+                {el.data.author !== stateStoredUser.id ? (
+                  <a href={`/profile/${el.dataauthor}`}> {el.data.username}</a>
                 ) : (
                   "You "
                 )}
               </span>{" "}
               wrote :
             </p>
-            <p className={styles.commentBody}>{el.comment_content}</p>
-            <LikedDate el={el} />
-            <VoteDisplay el={el} />
+            <p className={styles.commentBody}>{el.data.content}</p>
+            <LikedDate el={el.data} />
+            <VoteDisplay el={el.data} />
           </div>
         ))}
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

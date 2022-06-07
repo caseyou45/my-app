@@ -9,7 +9,7 @@ import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 const ArticlesLiked = () => {
   const [articlesLiked, setArticlesLiked] = useState([]);
   const match = useMatch("/profile/:id");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchUserComment(match.params.id);
@@ -63,7 +63,7 @@ const ArticlesLiked = () => {
           setArticlesLiked(x);
         })
         .catch((error) => {
-          setErrorMessage(error.response.data.error);
+          setError(error);
         });
     };
 
@@ -102,10 +102,7 @@ const ArticlesLiked = () => {
           </div>
         ))}
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import styles from "./UserPage.module.css";
 import CommentsLiked from "./SubComponents/CommentsLiked";
 import ArticlesLiked from "./SubComponents/ArticlesLiked";
 import CommentsMade from "./SubComponents/CommentsMade";
+import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 import { useMatch } from "react-router-dom";
 
@@ -12,6 +13,8 @@ const UserPage = () => {
   const [madeComments, setMadeComments] = useState(true);
   const [likedComments, setLikedComments] = useState(false);
   const [likedArticles, setLikedArticles] = useState(false);
+  const [error, setError] = useState("");
+
   const stateStoredUser = useSelector((state) => state.user);
   const urlUsername = useMatch("/profile/:username").params.username;
 
@@ -83,6 +86,7 @@ const UserPage = () => {
           stateStoredUser={stateStoredUser}
         />
       )}
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };

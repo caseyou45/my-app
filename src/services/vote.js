@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const baseUrl = "/api/vote";
 
 let token = null;
@@ -33,7 +34,7 @@ const getVotesByUsername = async (username) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/${username}`, config);
+  return await axios.get(`${baseUrl}/user/${username}`, config);
 };
 
 const voteServices = {

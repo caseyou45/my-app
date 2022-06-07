@@ -16,7 +16,7 @@ const ArticlePage = () => {
 
   const [load, setLoad] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   const match = useMatch("/article/id/:id");
 
@@ -31,7 +31,7 @@ const ArticlePage = () => {
 
         setLoad(true);
       } catch (error) {
-        setErrorMessage(error.response.statusText);
+        setError(error);
       }
 
       // Get Comments
@@ -43,7 +43,7 @@ const ArticlePage = () => {
 
         setReplies(comments.data.filter((el) => el.pcomment !== null));
       } catch (error) {
-        setErrorMessage(error.response.statusText);
+        setError(error);
       }
     };
 
@@ -68,7 +68,7 @@ const ArticlePage = () => {
         setReplies([...result, removedComment.data]);
       }
     } catch (error) {
-      setErrorMessage(error.response.statusText);
+      setError(error);
     }
   };
 
@@ -102,10 +102,7 @@ const ArticlePage = () => {
               )}
             </div>
           )}
-          <ErrorHandler
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
+          <ErrorHandler error={error} setError={setError} />
         </div>
       )}
     </div>

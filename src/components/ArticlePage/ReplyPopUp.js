@@ -7,7 +7,7 @@ import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
   const [text, setText] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
   const stateStoredUser = useSelector((state) => state.user);
 
@@ -34,7 +34,7 @@ const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
         setReplies((prev) => [reply.data, ...prev]);
         handlePopUpClose();
       } catch (error) {
-        setErrorMessage(error);
+        setError(error);
       }
     }
   };
@@ -54,10 +54,7 @@ const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
           <button onClick={handlePopUpClose}>Cancel</button>
         </div>
       </div>
-      <ErrorHandler
-        errorMessage={errorMessage}
-        setErrorMessage={setErrorMessage}
-      />
+      <ErrorHandler error={error} setError={setError} />
     </div>
   );
 };
