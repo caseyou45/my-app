@@ -20,21 +20,21 @@ const removeVoteService = async (vote) => {
     headers: { Authorization: token },
   };
 
-  return await axios.post(baseUrl + "/delete", vote, config);
+  return await axios.patch(baseUrl + "/delete", vote, config);
 };
 
 const getVotesByCommentID = async (id) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/${id}`, config);
+  return await axios.get(`${baseUrl}/comment?id=${id}`, config);
 };
 
 const getVotesByUsername = async (username) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/user/${username}`, config);
+  return await axios.get(`${baseUrl}/user?username=${username}`, config);
 };
 
 const voteServices = {

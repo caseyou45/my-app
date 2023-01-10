@@ -150,7 +150,7 @@ const Comment = ({
   };
 
   const CommentButtonHanlder = () => {
-    if (comment.author === 5) {
+    if (comment.deleted) {
       return <div className={styles.commentButtons}></div>;
     }
 

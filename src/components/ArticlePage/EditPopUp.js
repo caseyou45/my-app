@@ -19,7 +19,7 @@ const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
     comment.content = text;
 
     try {
-      const res = await commentService.editCommentService(comment.id, comment);
+      const res = await commentService.editCommentService(comment);
       const editedComment = res.data;
 
       if (comment.pcomment === null) {

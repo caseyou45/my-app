@@ -3,7 +3,9 @@ const baseUrl = "/api/article";
 
 const articlesByCategory = async (category) => {
   try {
-    const response = await axios.get(baseUrl + "/category/" + category); //makes API call to get news from backend by category
+    const response = await axios.get(
+      baseUrl + "/category?category=" + category
+    ); //makes API call to get news from backend by category
     return response.data.filter((el) => el.urltoimage !== null); //filters out any articles that do not have pictures
   } catch (error) {
     return error;
@@ -12,7 +14,7 @@ const articlesByCategory = async (category) => {
 
 const articleById = async (id) => {
   try {
-    const response = await axios.get(baseUrl + "/id/" + id); //makes API call to get one article from backend by id
+    const response = await axios.get(baseUrl + "/id?id=" + id); //makes API call to get one article from backend by id
     return response.data;
   } catch (error) {
     return error;

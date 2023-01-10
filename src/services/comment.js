@@ -14,24 +14,24 @@ const newComment = async (comment) => {
   return await axios.post(baseUrl, comment, config);
 };
 
-const deleteCommentService = async (id, deleteInfo) => {
+const deleteCommentService = async (deleteInfo) => {
   try {
     const config = {
       headers: { Authorization: token },
     };
-    return await axios.patch(`${baseUrl}/delete/${id}`, deleteInfo, config);
+    return await axios.patch(`${baseUrl}/delete`, deleteInfo, config);
   } catch (error) {
     return error;
   }
 };
 
-const editCommentService = async (id, editInfo) => {
+const editCommentService = async (editInfo) => {
   try {
     const config = {
       headers: { Authorization: token },
     };
 
-    return await axios.patch(`${baseUrl}/edit/${id}`, editInfo, config);
+    return await axios.patch(`${baseUrl}/edit`, editInfo, config);
   } catch (error) {
     return error;
   }
@@ -41,14 +41,14 @@ const getCommentsByAritcleID = async (id) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/${id}`, config);
+  return await axios.get(`${baseUrl}/article?id=${id}`, config);
 };
 
 const getCommentsMadeByUser = async (username) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/user/commented/${username}`, config);
+  return await axios.get(`${baseUrl}/user?username=${username}`, config);
 };
 
 const getCommentsLikedByUser = async (votes) => {

@@ -51,12 +51,8 @@ const ArticlePage = () => {
   }, [load, match.params.id]);
 
   const deleteComment = async (comment) => {
-    comment.username = "removed";
-    comment.content = "comment removed";
-
     try {
       const removedComment = await commentServices.deleteCommentService(
-        comment.id,
         comment
       );
 
