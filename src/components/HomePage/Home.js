@@ -19,7 +19,6 @@ const Home = () => {
       const retrievedNewsFromDB = await articleServices.articlesByCategory(
         category
       );
-
       setNews([...retrievedNewsFromDB]);
     } catch (error) {
       setError(error);

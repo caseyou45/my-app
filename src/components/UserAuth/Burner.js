@@ -47,7 +47,6 @@ const Burner = () => {
 
       commentServices.setToken(loggedUser.jwt);
       voteServices.setToken(loggedUser.jwt);
-      userServices.setToken(loggedUser.jwt);
 
       let userDetails;
 

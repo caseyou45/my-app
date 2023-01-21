@@ -55,13 +55,8 @@ const CommentsMade = ({ urlUsername, stateStoredUser }) => {
 
   const DeleteDisplay = ({ el }) => {
     const deleteComment = async (comment) => {
-      const deleteInfo = {
-        author: 5,
-        content: "comment removed",
-      };
-
       try {
-        await commentServices.deleteCommentService(comment.id, deleteInfo);
+        await commentServices.deleteCommentService(comment);
 
         setComments((prev) => prev.filter((el) => el.id !== comment.id));
       } catch (error) {

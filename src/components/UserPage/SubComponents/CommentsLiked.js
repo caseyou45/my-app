@@ -17,15 +17,11 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
 
   const fetchUserComment = async (urlUsername) => {
     try {
-      const votes = await voteServices.getVotesByUsername(urlUsername);
+      const likedComments = await commentServices.getCommentsLikedByUser(
+        urlUsername
+      );
 
-      const likedComments = await commentServices.getCommentsLikedByUser(votes);
-
-      for (let index = 0; index < likedComments.length; index++) {
-        likedComments[index].data.id = votes.data[index].id;
-      }
-
-      setCommentsLiked(likedComments);
+      setCommentsLiked(likedComments.data);
     } catch (error) {
       setError(error);
     }
@@ -99,17 +95,17 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
           <div className={styles.commentCard}>
             <p className={styles.userName}>
               <span>
-                {el.data.author !== stateStoredUser.id ? (
-                  <a href={`/profile/${el.dataauthor}`}> {el.data.username}</a>
+                {el.author !== stateStoredUser.id ? (
+                  <a href={`/profile/${el.dataauthor}`}> {el.username}</a>
                 ) : (
                   "You "
                 )}
               </span>{" "}
               wrote :
             </p>
-            <p className={styles.commentBody}>{el.data.content}</p>
-            <LikedDate el={el.data} />
-            <VoteDisplay el={el.data} />
+            <p className={styles.commentBody}>{el.content}</p>
+            <LikedDate el={el} />
+            <VoteDisplay el={el} />
           </div>
         ))}
       </div>

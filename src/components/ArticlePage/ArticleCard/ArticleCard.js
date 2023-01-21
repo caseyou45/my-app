@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import styles from "./ArticleCard.module.css";
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
-const ArticleCard = ({ setComments, article }) => {
+const ArticleCard = ({ article }) => {
   const [openComment, setOpenComment] = useState(false);
   const [commentToPost, setCommentToPost] = useState("");
   const stateStoredUser = useSelector((state) => state.user);
@@ -40,17 +40,15 @@ const ArticleCard = ({ setComments, article }) => {
 
     if (commentToPost !== "") {
       const newComment = {
-        content: commentToPost,
         author: stateStoredUser.id,
-        date: new Date(),
-        pcomment: null,
-        particle: article.id,
-        username: stateStoredUser.username,
+        deleted: false,
+        parentComment: null,
+        article: article.id,
+        content: commentToPost,
       };
 
       try {
-        const res = await commentService.newComment(newComment);
-        setComments((prev) => [res.data, ...prev]);
+        const comment = await commentService.newComment(newComment);
         handleCommentClose();
         setCommentToPost("");
       } catch (error) {

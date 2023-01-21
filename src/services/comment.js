@@ -14,6 +14,14 @@ const newComment = async (comment) => {
   return await axios.post(baseUrl, comment, config);
 };
 
+const reply = async (comment) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  return await axios.post(baseUrl + "/reply", comment, config);
+};
+
 const deleteCommentService = async (deleteInfo) => {
   try {
     const config = {
@@ -48,26 +56,19 @@ const getCommentsMadeByUser = async (username) => {
   const config = {
     headers: { Authorization: token },
   };
-  return await axios.get(`${baseUrl}/user?username=${username}`, config);
+  return await axios.get(`${baseUrl}/made/user?username=${username}`, config);
 };
 
-const getCommentsLikedByUser = async (votes) => {
+const getCommentsLikedByUser = async (username) => {
   const config = {
     headers: { Authorization: token },
   };
 
-  let promises = [];
-
-  for (let i = 0; i < votes.data.length; i++) {
-    promises.push(
-      axios.get(`${baseUrl}/voted/${votes.data[i].commentid}`, config)
-    );
-  }
-
-  return Promise.all(promises);
+  return await axios.get(`${baseUrl}/liked/user?username=${username}`, config);
 };
 let commentServices = {
   newComment,
+  reply,
   deleteCommentService,
   editCommentService,
   getCommentsByAritcleID,

@@ -21,16 +21,16 @@ const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
 
     if (text !== "") {
       const newComment = {
-        content: text,
         author: stateStoredUser.id,
+        deleted: false,
+        parentComment: comment.id,
+        article: article.id,
+        content: text,
         date: new Date(),
-        pcomment: comment.id,
-        particle: comment.particle,
-        username: stateStoredUser.username,
       };
 
       try {
-        const reply = await commentService.newComment(newComment);
+        const reply = await commentService.reply(newComment);
         setReplies((prev) => [reply.data, ...prev]);
         handlePopUpClose();
       } catch (error) {
