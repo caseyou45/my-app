@@ -33,13 +33,13 @@ const deleteCommentService = async (deleteInfo) => {
   }
 };
 
-const editCommentService = async (editInfo) => {
+const editCommentService = async (comment) => {
   try {
     const config = {
       headers: { Authorization: token },
     };
 
-    return await axios.patch(`${baseUrl}/edit`, editInfo, config);
+    return await axios.patch(`${baseUrl}`, comment, config);
   } catch (error) {
     return error;
   }

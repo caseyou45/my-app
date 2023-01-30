@@ -5,13 +5,18 @@ import { useSelector } from "react-redux";
 import commentService from "../../services/comment";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
-const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
+const ReplyPopUp = ({
+  setOpenReply,
+  comment,
+  article,
+  fetchArticleAndComments,
+}) => {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
 
   const stateStoredUser = useSelector((state) => state.user);
 
-  const handlePopUpClose = (event) => {
+  const handlePopUpClose = () => {
     setText("");
     setOpenReply(false);
   };
@@ -27,11 +32,12 @@ const ReplyPopUp = ({ setOpenReply, comment, setReplies, article }) => {
         article: article.id,
         content: text,
         date: new Date(),
+        username: stateStoredUser.username,
       };
 
       try {
-        const reply = await commentService.reply(newComment);
-        setReplies((prev) => [reply.data, ...prev]);
+        await commentService.reply(newComment);
+        fetchArticleAndComments(article.id);
         handlePopUpClose();
       } catch (error) {
         setError(error);

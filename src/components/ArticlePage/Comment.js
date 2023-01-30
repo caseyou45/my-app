@@ -5,10 +5,11 @@ import ReplyPopUp from "./ReplyPopUp";
 import HandleDisplayTime from "../Utils/HandleDisplayTime";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import commentService from "../../services/comment";
 import voteServices from "../../services/vote";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
-const Comment = ({ comment, subStyle, article, deleteComment }) => {
+const Comment = ({ comment, subStyle, article, fetchArticleAndComments }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openReply, setOpenReply] = useState(false);
   const [likesTotalForComment, setLikesTotalForComment] = useState(0);
@@ -20,6 +21,7 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
   useEffect(() => {
     setLikesTotalForComment(comment.likes.length);
     const vote = comment.likes.find((el) => el.author === stateStoredUser.id);
+
     if (vote) {
       setUserVote(vote);
     }
@@ -37,9 +39,8 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
   const handleVote = () => {
     if (userVote === null) {
       const vote = {
-        vote: 1,
-        articleid: article.id,
-        commentid: comment.id,
+        articleID: comment.article,
+        commentID: comment.id,
         author: stateStoredUser.id,
       };
       voteServices
@@ -65,7 +66,7 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
     }
   };
 
-  const handleEditPopUpOpen = (event) => {
+  const handleEditPopUpOpen = () => {
     if (checkAuth() !== true) {
       setError({ "error.response.status": 403 });
     } else {
@@ -76,7 +77,18 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
     }
   };
 
-  const handleReplyPopUpOpen = (event) => {
+  const deleteComment = async () => {
+    commentService
+      .deleteCommentService(comment)
+      .then((response) => {
+        fetchArticleAndComments(article.id);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  const handleReplyPopUpOpen = () => {
     if (checkAuth() !== true) {
       setError({ "error.response.status": 403 });
     } else {
@@ -147,18 +159,19 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
           >
             <h3>{comment.username}</h3>
           </Link>
-          <h3>{comment.username}</h3>
+
           <span>
-            <HandleDisplayTime time={comment.date} />
+            <HandleDisplayTime date={comment.date} />
           </span>
           <p className={styles.commentBody}>{comment.content}</p>
         </div>
-        <CommentButtonHanlder />
+        {!comment.deleted && <CommentButtonHanlder />}
         {openEdit && (
           <EditPopUp
             setOpenEdit={setOpenEdit}
             comment={comment}
             article={article}
+            fetchArticleAndComments={fetchArticleAndComments}
           />
         )}
         {openReply && (
@@ -166,6 +179,7 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
             setOpenReply={setOpenReply}
             comment={comment}
             article={article}
+            fetchArticleAndComments={fetchArticleAndComments}
           />
         )}
       </div>
@@ -175,8 +189,8 @@ const Comment = ({ comment, subStyle, article, deleteComment }) => {
           key={index}
           subStyle={subStyle + 0.75}
           comment={el}
-          deleteComment={deleteComment}
           article={article}
+          fetchArticleAndComments={fetchArticleAndComments}
         />
       ))}
       <ErrorHandler error={error} setError={setError} />

@@ -4,7 +4,7 @@ import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 import commentService from "../../services/comment";
 
-const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
+const EditPopUp = ({ setOpenEdit, comment, fetchArticleAndComments }) => {
   const [text, setText] = useState(comment.content);
   const [error, setError] = useState("");
 
@@ -15,22 +15,12 @@ const EditPopUp = ({ setOpenEdit, replies, comments, comment }) => {
 
   const editComment = async (event) => {
     event.preventDefault();
-
     comment.content = text;
 
     try {
-      const res = await commentService.editCommentService(comment);
-      const editedComment = res.data;
-
-      if (comment.pcomment === null) {
-        const result = comments.find((el) => el.id === comment.id);
-        result.content = editedComment.content;
-        handlePopUpClose();
-      } else {
-        const result = replies.find((el) => el.id === comment.id);
-        result.content = editedComment.content;
-        handlePopUpClose();
-      }
+      await commentService.editCommentService(comment);
+      fetchArticleAndComments(comment.article);
+      handlePopUpClose();
     } catch (error) {
       setError(error);
     }

@@ -1,13 +1,14 @@
 import styles from "../ArticlePage/ArticlePage.module.css";
 
-const HandleDisplayTime = (date) => {
+const HandleDisplayTime = ({ date }) => {
   let time;
   const now = new Date();
-  const postTime = new Date(date.time);
+  const postTime = new Date(date);
   const diffTime = Math.abs(postTime - now);
   const diffMin = Math.ceil(diffTime / (1000 * 60));
   const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   if (diffDays > 1) {
     time = `${diffDays} days ago`;
   }

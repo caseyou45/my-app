@@ -9,42 +9,60 @@ import articleServices from "../../services/article";
 
 const ArticlePage = () => {
   const [article, setArticle] = useState("");
+  const [comments, setComments] = useState("");
+  const [readyForRender, setReadyForRender] = useState(false);
+
   const [error, setError] = useState("");
   const match = useMatch("/article/id/:id");
 
   useEffect(() => {
+    fetchArticleAndComments(match.params.id);
+  }, [match.params.id]);
+
+  const fetchArticleAndComments = (id) => {
     articleServices
-      .articleById(match.params.id)
+      .articleById(id)
       .then((res) => {
         setArticle(res);
+        setComments(res.comments);
+        setReadyForRender(true);
       })
       .catch((err) => {
         setError(err);
       });
-  }, [match.params.id]);
-
+  };
   return (
-    <div>
-      <ArticelCard article={article} />
-      {article !== "" && (
+    readyForRender && (
+      <div>
+        <ArticelCard
+          article={article}
+          comments={comments}
+          setComments={setComments}
+          fetchArticleAndComments={fetchArticleAndComments}
+        />
         <div>
-          {article.comments.length === 0 ? (
+          {comments.length === 0 ? (
             <div className={styles.noComments}>
               <h3>No comments yet. Be the first.</h3>
             </div>
           ) : (
             <div className={styles.commentColumn}>
-              {article.comments.map((comment, index) => (
+              {comments.map((comment, index) => (
                 <div key={index}>
-                  <Comment subStyle={0} comment={comment} article={article} />
+                  <Comment
+                    subStyle={0}
+                    comment={comment}
+                    article={article}
+                    fetchArticleAndComments={fetchArticleAndComments}
+                  />
                 </div>
               ))}
             </div>
           )}
           <ErrorHandler error={error} setError={setError} />
         </div>
-      )}
-    </div>
+      </div>
+    )
   );
 };
 
