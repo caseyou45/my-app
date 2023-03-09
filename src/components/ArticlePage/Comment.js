@@ -1,53 +1,32 @@
 import React, { useState, useEffect } from "react";
-
 import styles from "./ArticlePage.module.css";
-
 import EditPopUp from "./EditPopUp";
 import ReplyPopUp from "./ReplyPopUp";
+import HandleDisplayTime from "../Utils/HandleDisplayTime";
 import { Link } from "react-router-dom";
-
 import { useSelector } from "react-redux";
+import commentService from "../../services/comment";
 import voteServices from "../../services/vote";
-
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
-const Comment = ({
-  comment,
-  subStyle,
-  article,
-  comments,
-  setComments,
-  replies,
-  setReplies,
-  deleteComment,
-}) => {
+const Comment = ({ comment, subStyle, article, fetchArticleAndComments }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openReply, setOpenReply] = useState(false);
-
-  const [voteTotalForComment, setVoteTotalForComment] = useState(0);
+  const [likesTotalForComment, setLikesTotalForComment] = useState(0);
   const [userVote, setUserVote] = useState(null);
   const [error, setError] = useState("");
 
   const stateStoredUser = useSelector((state) => state.user);
 
   useEffect(() => {
-    fetchVotes();
-  }, []);
-
-  const fetchVotes = async () => {
-    const thisCommentsVotes = await voteServices.getVotesByCommentID(
-      comment.id
-    );
-    setVoteTotalForComment(thisCommentsVotes.data.length);
-
-    const vote = thisCommentsVotes.data.find(
-      (el) => el.author === stateStoredUser.id
-    );
+    setLikesTotalForComment(comment.likes.length);
+    const vote = comment.likes.find((el) => el.author === stateStoredUser.id);
 
     if (vote) {
       setUserVote(vote);
     }
-  };
+  }, []);
+
   const handleCardStyle = (x) => {
     return {
       marginTop: "1rem",
@@ -60,16 +39,17 @@ const Comment = ({
   const handleVote = () => {
     if (userVote === null) {
       const vote = {
-        vote: 1,
-        articleid: article.id,
-        commentid: comment.id,
+        articleID: comment.article,
+        commentID: comment.id,
         author: stateStoredUser.id,
+        commentContent: comment.content,
+        commentUsername: comment.username,
       };
       voteServices
         .addVoteService(vote)
         .then((response) => {
           setUserVote(response.data);
-          setVoteTotalForComment(voteTotalForComment + 1);
+          setLikesTotalForComment(likesTotalForComment + 1);
         })
         .catch((error) => {
           setError(error);
@@ -80,7 +60,7 @@ const Comment = ({
         .removeVoteService(userVote)
         .then((response) => {
           setUserVote(null);
-          setVoteTotalForComment(voteTotalForComment - 1);
+          setLikesTotalForComment(likesTotalForComment - 1);
         })
         .catch((error) => {
           setError(error);
@@ -88,7 +68,7 @@ const Comment = ({
     }
   };
 
-  const handleEditPopUpOpen = (event) => {
+  const handleEditPopUpOpen = () => {
     if (checkAuth() !== true) {
       setError({ "error.response.status": 403 });
     } else {
@@ -99,7 +79,18 @@ const Comment = ({
     }
   };
 
-  const handleReplyPopUpOpen = (event) => {
+  const deleteComment = async () => {
+    commentService
+      .deleteCommentService(comment)
+      .then((response) => {
+        fetchArticleAndComments(article.id);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  const handleReplyPopUpOpen = () => {
     if (checkAuth() !== true) {
       setError({ "error.response.status": 403 });
     } else {
@@ -116,44 +107,8 @@ const Comment = ({
     } else return false;
   };
 
-  const HandleDisplayTime = (date) => {
-    let time;
-    const now = new Date();
-    const postTime = new Date(date.time);
-    const diffTime = Math.abs(postTime - now);
-    const diffMin = Math.ceil(diffTime / (1000 * 60));
-    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays > 1) {
-      time = `${diffDays} days ago`;
-    }
-
-    if (diffDays === 1) {
-      time = `${diffDays} day ago`;
-    }
-
-    if (diffHours < 24) {
-      time = `${diffHours} hours ago`;
-      if (diffHours === 1) {
-        time = `${diffHours} hour ago`;
-      }
-    }
-
-    if (diffMin < 60) {
-      time = `${diffMin} mins ago`;
-      if (diffMin === 1) {
-        time = `${diffMin} min ago`;
-      }
-    }
-
-    return <span className={styles.commentTime}>Posted : {time}</span>;
-  };
-
   const CommentButtonHanlder = () => {
-    if (comment.deleted) {
-      return <div className={styles.commentButtons}></div>;
-    }
-
+    <div className={styles.commentButtons}></div>;
     if (comment.author !== stateStoredUser.id) {
       return (
         <div className={styles.commentButtons}>
@@ -162,7 +117,7 @@ const Comment = ({
           ) : (
             <i onClick={() => handleVote(article)}>&#9825;</i>
           )}
-          <p>{voteTotalForComment}</p>
+          <p>{likesTotalForComment}</p>
           <button name="reply" onClick={(event) => handleReplyPopUpOpen(event)}>
             Reply
           </button>
@@ -176,7 +131,7 @@ const Comment = ({
           ) : (
             <i onClick={() => handleVote(article)}> &#9825;</i>
           )}
-          <p>{voteTotalForComment}</p>
+          <p>{likesTotalForComment}</p>
           <button name="reply" onClick={(event) => handleReplyPopUpOpen(event)}>
             Reply
           </button>
@@ -200,7 +155,7 @@ const Comment = ({
     <div>
       <div style={handleCardStyle(subStyle)} className={styles.commentCard}>
         <div>
-          {comment.author !== 5 ? (
+          {!comment.deleted ? (
             <Link
               className={styles.navButton}
               to={`/profile/${comment.username}`}
@@ -210,52 +165,40 @@ const Comment = ({
           ) : (
             <h3>{comment.username}</h3>
           )}
+
           <span>
-            {comment.author !== 5 && <HandleDisplayTime time={comment.date} />}
+            <HandleDisplayTime date={comment.date} />
           </span>
           <p className={styles.commentBody}>{comment.content}</p>
         </div>
-        <CommentButtonHanlder />
+        {!comment.deleted && <CommentButtonHanlder />}
         {openEdit && (
           <EditPopUp
             setOpenEdit={setOpenEdit}
-            replies={replies}
-            comments={comments}
             comment={comment}
-            setReplies={setReplies}
-            setComments={setComments}
             article={article}
+            fetchArticleAndComments={fetchArticleAndComments}
           />
         )}
         {openReply && (
           <ReplyPopUp
             setOpenReply={setOpenReply}
-            replies={replies}
-            comments={comments}
             comment={comment}
-            setReplies={setReplies}
-            setComments={setComments}
             article={article}
+            fetchArticleAndComments={fetchArticleAndComments}
           />
         )}
       </div>
 
-      {replies.map(
-        (el, index) =>
-          el.pcomment === comment.id && (
-            <Comment
-              key={index}
-              subStyle={subStyle + 0.75}
-              comment={el}
-              deleteComment={deleteComment}
-              setReplies={setReplies}
-              setComments={setComments}
-              comments={comments}
-              replies={replies}
-              article={article}
-            />
-          )
-      )}
+      {comment.replies.map((el, index) => (
+        <Comment
+          key={index}
+          subStyle={subStyle + 0.75}
+          comment={el}
+          article={article}
+          fetchArticleAndComments={fetchArticleAndComments}
+        />
+      ))}
       <ErrorHandler error={error} setError={setError} />
     </div>
   );

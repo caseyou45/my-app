@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "/api/vote";
+const baseUrl = "/api/like";
 
 let token = null;
 
@@ -9,6 +9,7 @@ const setToken = (newToken) => {
 };
 
 const addVoteService = async (vote) => {
+  console.log(vote);
   const config = {
     headers: { Authorization: token },
   };
@@ -20,28 +21,12 @@ const removeVoteService = async (vote) => {
     headers: { Authorization: token },
   };
 
-  return await axios.patch(baseUrl + "/delete", vote, config);
-};
-
-const getVotesByCommentID = async (id) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.get(`${baseUrl}/comment?id=${id}`, config);
-};
-
-const getVotesByUsername = async (username) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.get(`${baseUrl}/user?username=${username}`, config);
+  return await axios.patch(baseUrl, vote, config);
 };
 
 const voteServices = {
   addVoteService,
   removeVoteService,
-  getVotesByCommentID,
-  getVotesByUsername,
   setToken,
 };
 

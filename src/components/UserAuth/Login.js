@@ -24,23 +24,6 @@ const Login = () => {
     history("/");
   };
 
-  const getUserID = async (loggedUser) => {
-    try {
-      //token is set in the services so headers can be sent with JWT
-      commentServices.setToken(loggedUser.jwt);
-      voteServices.setToken(loggedUser.jwt);
-      userServices.setToken(loggedUser.jwt);
-
-      const userDetails = await userServices.details(loggedUser.username);
-      console.log(userDetails);
-
-      loggedUser.id = userDetails.id;
-      setLocalAuth(loggedUser);
-    } catch (error) {
-      setMessage(error.response.data);
-    }
-  };
-
   const submitSignIn = async () => {
     const user = {
       username: username,
@@ -49,8 +32,11 @@ const Login = () => {
 
     try {
       const loggedUser = await userServices.signin(user);
-      loggedUser.username = user.username;
-      getUserID(loggedUser);
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
+      userServices.setToken(loggedUser.jwt);
+
+      setLocalAuth(loggedUser);
     } catch (error) {
       setMessage(error.response.data);
     }

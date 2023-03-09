@@ -1,41 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./UserPage.module.css";
 import CommentsLiked from "./SubComponents/CommentsLiked";
-import ArticlesLiked from "./SubComponents/ArticlesLiked";
 import CommentsMade from "./SubComponents/CommentsMade";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
-
+import userService from "../../services/user";
 import { useMatch } from "react-router-dom";
 
 const UserPage = () => {
   const [madeComments, setMadeComments] = useState(true);
   const [likedComments, setLikedComments] = useState(false);
-  const [likedArticles, setLikedArticles] = useState(false);
   const [error, setError] = useState("");
+  const [user, setUser] = useState("");
 
   const stateStoredUser = useSelector((state) => state.user);
   const urlUsername = useMatch("/profile/:username").params.username;
+  useEffect(() => {
+    setUsername(stateStoredUser.username);
+  }, [stateStoredUser]);
+
+  const setUsername = async (username) => {
+    const user = await userService.getUser(username);
+    console.log(user);
+    setUser(user);
+  };
 
   const pickDisplay = (e) => {
     const { value } = e.target;
     if (value === "madeComments") {
       setMadeComments(true);
       setLikedComments(false);
-      setLikedArticles(false);
     }
 
     if (value === "likedComments") {
       setMadeComments(false);
       setLikedComments(true);
-      setLikedArticles(false);
     }
 
     if (value === "likedArticles") {
       setMadeComments(false);
       setLikedComments(false);
-      setLikedArticles(true);
     }
   };
 
@@ -54,14 +59,6 @@ const UserPage = () => {
         </button>
         {stateStoredUser.username === urlUsername && (
           <div>
-            {/* <button
-              onClick={(e) => {
-                pickDisplay(e);
-              }}
-              value="likedArticles"
-            >
-              Liked Articles
-            </button> */}
             <button
               onClick={(e) => {
                 pickDisplay(e);
@@ -73,17 +70,18 @@ const UserPage = () => {
           </div>
         )}
       </div>
-      {likedComments && (
+      {likedComments && user && (
         <CommentsLiked
           urlUsername={urlUsername}
           stateStoredUser={stateStoredUser}
+          user={user}
         />
       )}
-      {/* {likedArticles && <ArticlesLiked />} */}
-      {madeComments && (
+      {madeComments && user && (
         <CommentsMade
           urlUsername={urlUsername}
           stateStoredUser={stateStoredUser}
+          user={user}
         />
       )}
       <ErrorHandler error={error} setError={setError} />

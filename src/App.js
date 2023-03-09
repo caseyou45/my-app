@@ -15,7 +15,6 @@ import voteService from "./services/vote";
 import commentService from "./services/comment";
 import { setStateUser } from "./reducers/userReducer";
 import { Routes, Route } from "react-router-dom";
-import userServices from "./services/user";
 
 const App = (props) => {
   const dispatch = useDispatch();
@@ -25,9 +24,8 @@ const App = (props) => {
 
     if (loggedUserJSON) {
       const memoryStoredUser = JSON.parse(loggedUserJSON);
-      voteService.setToken(memoryStoredUser.jwt);
-      commentService.setToken(memoryStoredUser.jwt);
-      userServices.setToken(memoryStoredUser.jwt);
+      voteService.setToken(memoryStoredUser.accessToken);
+      commentService.setToken(memoryStoredUser.accessToken);
       dispatch(setStateUser(memoryStoredUser));
     }
   });
