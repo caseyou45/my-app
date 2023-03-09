@@ -7,20 +7,9 @@ import commentServices from "../../../services/comment";
 
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
-const CommentsMade = ({ urlUsername, stateStoredUser }) => {
+const CommentsMade = ({ user, urlUsername, stateStoredUser }) => {
   const [comments, setComments] = useState([]);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetchUserComment(urlUsername);
-  }, [urlUsername]);
-
-  const fetchUserComment = async (urlUsername) => {
-    try {
-      const x = await commentServices.getCommentsMadeByUser(urlUsername);
-      setComments(x.data);
-    } catch (error) {}
-  };
 
   const MadeDate = ({ el }) => {
     function timeSince(date) {
@@ -77,7 +66,7 @@ const CommentsMade = ({ urlUsername, stateStoredUser }) => {
               ? styles.navLink
               : styles.navLinkWithoutAuth
           }
-          to={`/article/id/${el.particle}`}
+          to={`/article/id/${el.article}`}
         >
           Go to Full Post
         </NavLink>
@@ -93,7 +82,7 @@ const CommentsMade = ({ urlUsername, stateStoredUser }) => {
           : "Comments You've Made"}
       </h3>
       <div>
-        {comments.map((el, index) => (
+        {user.comments.map((el, index) => (
           <div className={styles.commentCard}>
             <p className={styles.title}>{el.title}</p>
             <p className={styles.userName}>

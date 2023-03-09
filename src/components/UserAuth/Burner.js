@@ -15,6 +15,14 @@ const Burner = () => {
 
   const dispatch = useDispatch();
 
+  const setLocalAuth = (loggedUser) => {
+    window.localStorage.setItem("loggedForumUser", JSON.stringify(loggedUser));
+
+    dispatch(setStateUser(loggedUser));
+
+    history("/");
+  };
+
   const submitSignup = async () => {
     const makeUsername = (length) => {
       let result = "";
@@ -35,39 +43,15 @@ const Burner = () => {
     };
 
     try {
-      await userServices.signup(user);
+      const loggedUser = await userServices.signup(user);
+      console.log(loggedUser);
 
-      let loggedUser;
+      commentServices.setToken(loggedUser.accessToken);
+      voteServices.setToken(loggedUser.accessToken);
 
-      try {
-        loggedUser = await userServices.signin(user);
-      } catch (error) {
-        setMessage(error);
-      }
-
-      commentServices.setToken(loggedUser.jwt);
-      voteServices.setToken(loggedUser.jwt);
-
-      let userDetails;
-
-      try {
-        userDetails = await userServices.details(user.username);
-
-        loggedUser.username = user.username;
-        loggedUser.id = userDetails.id;
-      } catch (error) {
-        setMessage(error);
-      }
-
-      window.localStorage.setItem(
-        "loggedForumUser",
-        JSON.stringify(loggedUser)
-      );
-
-      dispatch(setStateUser(loggedUser));
-      history("/");
+      setLocalAuth(loggedUser);
     } catch (error) {
-      setMessage(error);
+      setMessage(error.response.data);
     }
   };
 

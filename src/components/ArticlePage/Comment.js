@@ -42,6 +42,8 @@ const Comment = ({ comment, subStyle, article, fetchArticleAndComments }) => {
         articleID: comment.article,
         commentID: comment.id,
         author: stateStoredUser.id,
+        commentContent: comment.content,
+        commentUsername: comment.username,
       };
       voteServices
         .addVoteService(vote)
@@ -153,12 +155,16 @@ const Comment = ({ comment, subStyle, article, fetchArticleAndComments }) => {
     <div>
       <div style={handleCardStyle(subStyle)} className={styles.commentCard}>
         <div>
-          <Link
-            className={styles.navButton}
-            to={`/profile/${comment.username}`}
-          >
+          {!comment.deleted ? (
+            <Link
+              className={styles.navButton}
+              to={`/profile/${comment.username}`}
+            >
+              <h3>{comment.username}</h3>
+            </Link>
+          ) : (
             <h3>{comment.username}</h3>
-          </Link>
+          )}
 
           <span>
             <HandleDisplayTime date={comment.date} />

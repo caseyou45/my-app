@@ -14,5 +14,14 @@ const signin = async (user) => {
   return response.data;
 };
 
-const userServices = { signup, signin };
+const getUser = async (username) => {
+  try {
+    const response = await axios.get(baseUrl + "?username=" + username);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const userServices = { signup, signin, getUser };
 export default userServices;

@@ -5,27 +5,10 @@ import styles from "../UserPage.module.css";
 import { NavLink } from "react-router-dom";
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 import voteServices from "../../../services/vote";
-import commentServices from "../../../services/comment";
 
-const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
+const CommentsLiked = ({ user, urlUsername, stateStoredUser }) => {
   const [commentsLiked, setCommentsLiked] = useState([]);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetchUserComment(urlUsername);
-  }, [urlUsername]);
-
-  const fetchUserComment = async (urlUsername) => {
-    try {
-      const likedComments = await commentServices.getCommentsLikedByUser(
-        urlUsername
-      );
-
-      setCommentsLiked(likedComments.data);
-    } catch (error) {
-      setError(error);
-    }
-  };
 
   const LikedDate = ({ el }) => {
     function timeSince(date) {
@@ -81,7 +64,7 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
           </i>
         )}
 
-        <NavLink className={styles.navLink} to={`/articles/${el.particle}`}>
+        <NavLink className={styles.navLink} to={`/article/id/${el.articleID}`}>
           Go to Full Post
         </NavLink>
       </div>
@@ -91,19 +74,22 @@ const CommentsLiked = ({ urlUsername, stateStoredUser }) => {
     <div>
       <h3>Comments You've Liked</h3>
       <div>
-        {commentsLiked.map((el, index) => (
+        {user.likes.map((el, index) => (
           <div className={styles.commentCard}>
             <p className={styles.userName}>
               <span>
                 {el.author !== stateStoredUser.id ? (
-                  <a href={`/profile/${el.dataauthor}`}> {el.username}</a>
+                  <a href={`/profile/${el.commentUsername}`}>
+                    {" "}
+                    {el.commentUsername}
+                  </a>
                 ) : (
                   "You "
                 )}
               </span>{" "}
               wrote :
             </p>
-            <p className={styles.commentBody}>{el.content}</p>
+            <p className={styles.commentBody}>{el.commentContent}</p>
             <LikedDate el={el} />
             <VoteDisplay el={el} />
           </div>

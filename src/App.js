@@ -15,7 +15,6 @@ import voteService from "./services/vote";
 import commentService from "./services/comment";
 import { setStateUser } from "./reducers/userReducer";
 import { Routes, Route } from "react-router-dom";
-import userServices from "./services/user";
 
 const App = (props) => {
   const dispatch = useDispatch();
