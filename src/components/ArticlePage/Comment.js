@@ -42,8 +42,6 @@ const Comment = ({ comment, subStyle, article, fetchArticleAndComments }) => {
         articleID: comment.article,
         commentID: comment.id,
         author: stateStoredUser.id,
-        commentContent: comment.content,
-        commentUsername: comment.username,
       };
       voteServices
         .addVoteService(vote)

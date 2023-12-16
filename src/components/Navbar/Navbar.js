@@ -40,7 +40,7 @@ const Navbar = () => {
   const logout = () => {
     window.localStorage.removeItem("loggedForumUser");
     dispatch(setStateUser(""));
-    history.push("/signin");
+    history("/signin");
   };
 
   return (

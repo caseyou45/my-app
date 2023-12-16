@@ -24,7 +24,7 @@ const ArticlePage = () => {
       .articleById(id)
       .then((res) => {
         setArticle(res);
-        setComments(res.comments);
+        // setComments(res.comments);
         setReadyForRender(true);
       })
       .catch((err) => {

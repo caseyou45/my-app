@@ -14,7 +14,7 @@ const articlesByCategory = async (category) => {
 
 const articleById = async (id) => {
   try {
-    const response = await axios.get(baseUrl + "?id=" + id); //makes API call to get one article from backend by id
+    const response = await axios.get(baseUrl + "/id?id=" + id); //makes API call to get one article from backend by id
     return response.data;
   } catch (error) {
     return error;

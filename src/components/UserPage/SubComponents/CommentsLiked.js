@@ -74,14 +74,14 @@ const CommentsLiked = ({ user, urlUsername, stateStoredUser }) => {
     <div>
       <h3>Comments You've Liked</h3>
       <div>
-        {user.likes.map((el, index) => (
+        {user.likeDTOs.map((el) => (
           <div className={styles.commentCard}>
             <p className={styles.userName}>
               <span>
-                {el.author !== stateStoredUser.id ? (
-                  <a href={`/profile/${el.commentUsername}`}>
+                {el.like.author !== stateStoredUser.id ? (
+                  <a href={`/profile/${el.comment.username}`}>
                     {" "}
-                    {el.commentUsername}
+                    {el.comment.username}
                   </a>
                 ) : (
                   "You "
@@ -89,7 +89,7 @@ const CommentsLiked = ({ user, urlUsername, stateStoredUser }) => {
               </span>{" "}
               wrote :
             </p>
-            <p className={styles.commentBody}>{el.commentContent}</p>
+            <p className={styles.commentBody}>{el.comment.content}</p>
             <LikedDate el={el} />
             <VoteDisplay el={el} />
           </div>

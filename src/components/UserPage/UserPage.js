@@ -22,7 +22,7 @@ const UserPage = () => {
 
   const setUsername = async (username) => {
     const user = await userService.getUser(username);
-    console.log(user);
+
     setUser(user);
   };
 

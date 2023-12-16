@@ -36,7 +36,6 @@ const Signup = () => {
     if (submissionCheck(user) === true) {
       try {
         const loggedUser = await userServices.signup(user);
-        console.log(loggedUser);
 
         commentServices.setToken(loggedUser.accessToken);
         voteServices.setToken(loggedUser.accessToken);

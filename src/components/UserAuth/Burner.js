@@ -46,8 +46,8 @@ const Burner = () => {
       const loggedUser = await userServices.signup(user);
       console.log(loggedUser);
 
-      commentServices.setToken(loggedUser.accessToken);
-      voteServices.setToken(loggedUser.accessToken);
+      commentServices.setToken(loggedUser.jwt);
+      voteServices.setToken(loggedUser.jwt);
 
       setLocalAuth(loggedUser);
     } catch (error) {
