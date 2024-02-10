@@ -1,18 +1,19 @@
+// Home.js
 import React, { useState, useEffect } from "react";
-
+import { useParams } from "react-router-dom";
 import NewsCard from "./NewsCard";
-
 import styles from "./HomePage.module.css";
 import articleServices from "../../services/article";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 const Home = () => {
+  const { category } = useParams();
   const [news, setNews] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchNews("general");
-  }, []);
+    fetchNews(category || "general"); // If category is not provided, default to "general"
+  }, [category]);
 
   const fetchNews = async (category) => {
     try {
@@ -24,6 +25,7 @@ const Home = () => {
       setError(error);
     }
   };
+
   return (
     <div>
       <div className={styles.news}>

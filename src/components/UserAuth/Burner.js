@@ -41,10 +41,10 @@ const Burner = () => {
       username: `burner-${makeUsername(8)}`,
       password: makeUsername(20),
     };
+    console.log(user);
 
     try {
       const loggedUser = await userServices.signup(user);
-      console.log(loggedUser);
 
       commentServices.setToken(loggedUser.jwt);
       voteServices.setToken(loggedUser.jwt);

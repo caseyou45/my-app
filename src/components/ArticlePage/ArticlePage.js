@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useMatch } from "react-router-dom";
 import ArticelCard from "./ArticleCard/ArticleCard";
-
-import Comment from "./Comment";
+import Comment from "./CommentCard/Comment";
 import styles from "./ArticlePage.module.css";
 import ErrorHandler from "../ErrorHandler/ErrorHandler";
 import articleServices from "../../services/article";
 
 const ArticlePage = () => {
   const [article, setArticle] = useState("");
-  const [comments, setComments] = useState("");
+  const [comments, setComments] = useState([]);
   const [readyForRender, setReadyForRender] = useState(false);
-
   const [error, setError] = useState("");
   const match = useMatch("/article/id/:id");
 
@@ -24,13 +22,19 @@ const ArticlePage = () => {
       .articleById(id)
       .then((res) => {
         setArticle(res);
-        // setComments(res.comments);
+        setComments(res.comments);
         setReadyForRender(true);
       })
       .catch((err) => {
         setError(err);
       });
   };
+
+  const handleNewComment = (newComment) => {
+    // Update the comments array with the new comment
+    setComments([...comments, newComment]);
+  };
+
   return (
     readyForRender && (
       <div>
@@ -39,6 +43,7 @@ const ArticlePage = () => {
           comments={comments}
           setComments={setComments}
           fetchArticleAndComments={fetchArticleAndComments}
+          handleNewComment={handleNewComment}
         />
         <div>
           {comments.length === 0 ? (

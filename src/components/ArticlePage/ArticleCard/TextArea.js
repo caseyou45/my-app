@@ -3,7 +3,7 @@ import commentService from "../../../services/comment";
 import { useSelector } from "react-redux";
 import styles from "./ArticleCard.module.css";
 
-const CommentTextArea = ({ setError, article }) => {
+const CommentTextArea = ({ setError, article, handleNewComment }) => {
   const [openComment, setOpenComment] = useState(true);
   const [commentToPost, setCommentToPost] = useState("");
   const stateStoredUser = useSelector((state) => state.user);
@@ -32,7 +32,8 @@ const CommentTextArea = ({ setError, article }) => {
       };
 
       try {
-        await commentService.newComment(newComment);
+        const comment = await commentService.newComment(newComment);
+        handleNewComment(comment.data);
       } catch (error) {
         setError(error);
       }

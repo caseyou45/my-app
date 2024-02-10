@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import styles from "./ArticlePage.module.css";
-import ErrorHandler from "../ErrorHandler/ErrorHandler";
-
-import commentService from "../../services/comment";
+import styles from "../ArticlePage.module.css";
+import ErrorHandler from "../../ErrorHandler/ErrorHandler";
+import commentService from "../../../services/comment";
 
 const EditPopUp = ({ setOpenEdit, comment, fetchArticleAndComments }) => {
   const [text, setText] = useState(comment.content);

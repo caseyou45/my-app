@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import styles from "./ArticlePage.module.css";
+import styles from "../ArticlePage.module.css";
 import { useSelector } from "react-redux";
-import commentService from "../../services/comment";
-import ErrorHandler from "../ErrorHandler/ErrorHandler";
+import commentService from "../../../services/comment";
+import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
 const ReplyPopUp = ({
   setOpenReply,

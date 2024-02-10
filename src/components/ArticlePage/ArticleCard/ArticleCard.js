@@ -3,7 +3,7 @@ import CommentTextArea from "./TextArea";
 import styles from "./ArticleCard.module.css";
 import ErrorHandler from "../../ErrorHandler/ErrorHandler";
 
-const ArticleCard = ({ article, comments, setComments }) => {
+const ArticleCard = ({ article, comments, setComments, handleNewComment }) => {
   const [error, setError] = useState("");
 
   return (
@@ -27,6 +27,7 @@ const ArticleCard = ({ article, comments, setComments }) => {
           article={article}
           comments={comments}
           setComments={setComments}
+          handleNewComment={handleNewComment}
         />
       </div>
       <ErrorHandler error={error} setError={setError} />
