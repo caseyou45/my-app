@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import userServices from "../../services/user";
-import commentServices from "../../services/comment";
-import voteServices from "../../services/vote";
+import localStorageManager from "../Utils/localStorageManager";
 
 import { useDispatch } from "react-redux";
 import { setStateUser } from "../../reducers/userReducer";
@@ -20,7 +19,7 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const setLocalAuth = (loggedUser) => {
-    window.localStorage.setItem("loggedForumUser", JSON.stringify(loggedUser));
+    localStorageManager.setUser(loggedUser);
 
     dispatch(setStateUser(loggedUser));
 
@@ -36,9 +35,6 @@ const Signup = () => {
     if (submissionCheck(user) === true) {
       try {
         const loggedUser = await userServices.signup(user);
-
-        commentServices.setToken(loggedUser.accessToken);
-        voteServices.setToken(loggedUser.accessToken);
 
         setLocalAuth(loggedUser);
       } catch (error) {

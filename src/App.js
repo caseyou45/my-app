@@ -1,9 +1,6 @@
-// App.js
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import voteService from "./services/vote";
-import commentService from "./services/comment";
 import { setStateUser } from "./reducers/userReducer";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/HomePage/Home";
@@ -12,18 +9,16 @@ import Signup from "./components/UserAuth/Signup";
 import Burner from "./components/UserAuth/Burner";
 import UserPage from "./components/UserPage/UserPage";
 import ArticlePage from "./components/ArticlePage/ArticlePage";
+import localStorageManager from "./components/Utils/localStorageManager";
 
 const App = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedForumUser");
+    const localStoredUser = localStorageManager.getUser();
 
-    if (loggedUserJSON) {
-      const memoryStoredUser = JSON.parse(loggedUserJSON);
-      voteService.setToken(memoryStoredUser.accessToken);
-      commentService.setToken(memoryStoredUser.accessToken);
-      dispatch(setStateUser(memoryStoredUser));
+    if (localStoredUser) {
+      dispatch(setStateUser(localStoredUser));
     }
   }, [dispatch]);
 

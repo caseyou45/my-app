@@ -1,24 +1,30 @@
 import axios from "axios";
+
 const baseUrl = "/api/article";
 
-const articlesByCategory = async (category) => {
+const getArticlesByCategory = async (category) => {
   try {
     const response = await axios.get(
-      baseUrl + "/category?category=" + category
-    ); //makes API call to get news from backend by category
-    return response.data.filter((el) => el.urltoimage !== null); //filters out any articles that do not have pictures
+      `${baseUrl}/category?category=${category}`
+    );
+    return response.data.filter((article) => article.urlToImage !== null);
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
-const articleById = async (id) => {
+const getArticleById = async (id) => {
   try {
-    const response = await axios.get(baseUrl + "/id?id=" + id); //makes API call to get one article from backend by id
+    const response = await axios.get(`${baseUrl}/id?id=${id}`);
     return response.data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
-export default { articlesByCategory, articleById };
+const articleService = {
+  getArticlesByCategory,
+  getArticleById,
+};
+
+export default articleService;

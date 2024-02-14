@@ -33,11 +33,11 @@ const CommentTextArea = ({ setError, article, handleNewComment }) => {
 
       try {
         const comment = await commentService.newComment(newComment);
-        handleNewComment(comment.data);
+        handleNewComment(comment);
+        handleCommentClick();
       } catch (error) {
         setError(error);
       }
-      handleCommentClick();
     }
   };
   return (

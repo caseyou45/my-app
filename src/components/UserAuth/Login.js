@@ -4,8 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStateUser } from "../../reducers/userReducer";
 import userServices from "../../services/user";
-import commentServices from "../../services/comment";
-import voteServices from "../../services/vote";
+
+import localStorageManager from "../Utils/localStorageManager";
 
 import styles from "./UserAuth.module.css";
 
@@ -17,7 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const setLocalAuth = (loggedUser) => {
-    window.localStorage.setItem("loggedForumUser", JSON.stringify(loggedUser));
+    localStorageManager.setUser(loggedUser);
 
     dispatch(setStateUser(loggedUser));
 
@@ -32,13 +32,10 @@ const Login = () => {
 
     try {
       const loggedUser = await userServices.signin(user);
-      commentServices.setToken(loggedUser.jwt);
-      voteServices.setToken(loggedUser.jwt);
-      userServices.setToken(loggedUser.jwt);
 
       setLocalAuth(loggedUser);
     } catch (error) {
-      setMessage(error.response.data);
+      setMessage(error.response.data.message);
     }
   };
 

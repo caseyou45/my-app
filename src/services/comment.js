@@ -1,80 +1,92 @@
 import axios from "axios";
+
+import localStorageManager from "../components/Utils/localStorageManager";
+
 const baseUrl = "/api/comment";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
+axios.interceptors.request.use((config) => {
+  const token = localStorageManager.getUserToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 const newComment = async (comment) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.post(baseUrl, comment, config);
+  try {
+    const response = await axios.post(baseUrl, comment);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const reply = async (comment) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-
-  return await axios.post(baseUrl + "/reply", comment, config);
+  try {
+    const response = await axios.post(`${baseUrl}/reply`, comment);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
 };
 
 const deleteCommentService = async (deleteInfo) => {
   try {
-    const config = {
-      headers: { Authorization: token },
-    };
-    return await axios.patch(`${baseUrl}/delete`, deleteInfo, config);
+    const response = await axios.patch(`${baseUrl}/delete`, deleteInfo);
+    return response.data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
 const editCommentService = async (comment) => {
   try {
-    const config = {
-      headers: { Authorization: token },
-    };
-
-    return await axios.patch(`${baseUrl}`, comment, config);
+    const response = await axios.patch(baseUrl, comment);
+    return response.data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
-const getCommentsByAritcleID = async (id) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.get(`${baseUrl}/article?id=${id}`, config);
+const getCommentsByArticleID = async (id) => {
+  try {
+    const response = await axios.get(`${baseUrl}/article?id=${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getCommentsMadeByUser = async (username) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.get(`${baseUrl}/made/user?username=${username}`, config);
+  try {
+    const response = await axios.get(
+      `${baseUrl}/made/user?username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getCommentsLikedByUser = async (username) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-
-  return await axios.get(`${baseUrl}/liked/user?username=${username}`, config);
+  try {
+    const response = await axios.get(
+      `${baseUrl}/liked/user?username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
-let commentServices = {
+
+const commentServices = {
   newComment,
   reply,
   deleteCommentService,
   editCommentService,
-  getCommentsByAritcleID,
+  getCommentsByArticleID,
   getCommentsMadeByUser,
   getCommentsLikedByUser,
-  setToken,
 };
 
 export default commentServices;

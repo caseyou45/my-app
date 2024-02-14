@@ -31,72 +31,80 @@ const Navbar = () => {
   };
 
   return (
-    <ul className={styles.navBar}>
-      <li className={styles.navLeft}>
-        <button className={styles.menuIcon} onClick={handleCategoryDropdown}>
-          {showDropdown ? <span>&#9747;</span> : <span>&#9776;</span>}
-        </button>
-        <div
-          className={styles.dropdownContent}
-          style={{ display: showDropdown ? "block" : "none" }}
-        >
-          {!stateStoredUser ? (
-            <>
-              <Link className={styles.authItem} to="/signin">
-                Sign In
-              </Link>
-              <Link
-                className={`${styles.authItem} ${styles.buttomAuthItem}`}
-                to="/signup"
-              >
-                Sign Up
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                className={styles.authItem}
-                to={`/profile/${stateStoredUser.id}`}
-              >
-                {stateStoredUser.username}
-              </Link>
-              <Link
-                className={`${styles.authItem} ${styles.buttomAuthItem}`}
-                onClick={logout}
-                to="/"
-              >
-                Log Out
-              </Link>
-            </>
-          )}
-          <Link className={styles.item} onClick={handleCategoryDropdown} to="/">
-            Headlines
-          </Link>
-          {[
-            "Science",
-            "Health",
-            "Entertainment",
-            "Sports",
-            "Business",
-            "Technology",
-          ].map((category, index) => (
+    <div className={styles.navBar}>
+      <div className={styles.linkNav}>
+        <div className={styles.navLeft}>
+          <button className={styles.menuIcon} onClick={handleCategoryDropdown}>
+            {showDropdown ? <span>&#9747;</span> : <span>&#9776;</span>}
+          </button>
+          <div
+            className={styles.dropdownContent}
+            style={{ display: showDropdown ? "block" : "none" }}
+          >
             <Link
-              key={index}
               className={styles.item}
               onClick={handleCategoryDropdown}
-              to={`/category/${category}`}
+              to="/"
             >
-              {category}
+              Headlines
             </Link>
-          ))}
+            {[
+              "Science",
+              "Health",
+              "Entertainment",
+              "Sports",
+              "Business",
+              "Technology",
+            ].map((category, index) => (
+              <Link
+                key={index}
+                className={styles.item}
+                onClick={handleCategoryDropdown}
+                to={`/category/${category}`}
+              >
+                {category}
+              </Link>
+            ))}
+          </div>
         </div>
-      </li>
-      <li>
-        <Link className={styles.logo} to="/">
-          NewsCycle
-        </Link>
-      </li>
-    </ul>
+        <div>
+          <Link className={styles.logo} to="/">
+            NewsCycle
+          </Link>
+        </div>
+      </div>
+      <div className={styles.auth}>
+        {!stateStoredUser ? (
+          <>
+            <Link className={styles.authItem} to="/signin">
+              Sign In
+            </Link>
+            <Link
+              className={`${styles.authItem} ${styles.buttomAuthItem}`}
+              to="/signup"
+            >
+              Sign Up
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              className={styles.authItem}
+              to={`/profile/${stateStoredUser.id}`}
+            >
+              {stateStoredUser.username}
+            </Link>
+            <Link
+              className={`${styles.authItem} ${styles.buttomAuthItem}`}
+              onClick={logout}
+              to="/"
+            >
+              Log Out
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

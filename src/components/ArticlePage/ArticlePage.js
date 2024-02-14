@@ -19,7 +19,7 @@ const ArticlePage = () => {
 
   const fetchArticleAndComments = (id) => {
     articleServices
-      .articleById(id)
+      .getArticleById(id)
       .then((res) => {
         setArticle(res);
         setComments(res.comments);

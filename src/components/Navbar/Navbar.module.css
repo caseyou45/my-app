@@ -39,28 +39,41 @@
   width: 15rem;
 }
 
-.authItem {
-  border-bottom: 2px solid #e2e2e236;
-  color: #ff6f6f;
-  display: none;
-  padding: 1.2rem 1rem;
-  text-align: center;
-  text-decoration: none;
-  width: 100%;
+.auth {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding-right: 1rem;
+
 }
 
-.buttomAuthItem {
-  border-bottom: 3px solid #ff6f6f5e;
+.authItem {
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+
 }
+
+
 
 .navBar {
   background-color: #ff6f6f;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
   color: #fff;
-  list-style-type: none;
   margin: 0;
   overflow: hidden;
   padding: 0;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.linkNav {
+
+  display: flex;
+  flex-direction: row;
 }
 
 .navLeft {
@@ -99,6 +112,7 @@
   margin-right: 2rem;
   width: 20px;
 }
+
 .menuIcon span {
   font-size: 1.5rem;
   padding: 0.5rem 0 0 1.5rem;
@@ -147,7 +161,5 @@
     display: none;
   }
 
-  .authItem {
-    display: block;
-  }
+
 }

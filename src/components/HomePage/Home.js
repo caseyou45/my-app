@@ -1,4 +1,3 @@
-// Home.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NewsCard from "./NewsCard";
@@ -17,7 +16,7 @@ const Home = () => {
 
   const fetchNews = async (category) => {
     try {
-      const retrievedNewsFromDB = await articleServices.articlesByCategory(
+      const retrievedNewsFromDB = await articleServices.getArticlesByCategory(
         category
       );
       setNews([...retrievedNewsFromDB]);

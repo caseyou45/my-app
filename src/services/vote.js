@@ -1,33 +1,38 @@
 import axios from "axios";
 
+import localStorageManager from "../components/Utils/localStorageManager";
+
 const baseUrl = "/api/like";
 
-let token = null;
-
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
+axios.interceptors.request.use((config) => {
+  const token = localStorageManager.getUserToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 const addVoteService = async (vote) => {
-  console.log(vote);
-  const config = {
-    headers: { Authorization: token },
-  };
-  return await axios.post(baseUrl, vote, config);
+  try {
+    const response = await axios.post(baseUrl, vote);
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
 };
 
 const removeVoteService = async (vote) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-
-  return await axios.patch(baseUrl, vote, config);
+  try {
+    const response = await axios.patch(baseUrl, vote);
+    return response.data;
+  } catch (error) {
+    throw error.response.data.error;
+  }
 };
 
 const voteServices = {
   addVoteService,
   removeVoteService,
-  setToken,
 };
 
 export default voteServices;
